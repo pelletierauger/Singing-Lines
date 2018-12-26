@@ -7,8 +7,9 @@ function setShaders() {
         attribute vec4 color;
         varying vec4 vColor;
         void main(void) {
+            // coordinates.x = coordinates.x / 1280.0;
             gl_Position = vec4(coordinates, 1.0);
-            gl_Position.x = gl_Position.x * (1600.0 / 2560.0);
+            // gl_Position.x = gl_Position.x * (1600.0 / 2560.0);
         vColor = color;
     }`;
 
@@ -32,7 +33,7 @@ function setShaders() {
     void main(void) {
         vec2 pos = gl_PointCoord;
         float rando = rand(pos);
-        gl_FragColor = vec4(vColor.x, vColor.y, vColor.z + (rando * 0.3), vColor.w - (rando * 0.3));
+        gl_FragColor = vec4(vColor.x, vColor.y, vColor.z + (rando * 0.7), vColor.w - (rando * 0.3));
         // gl_FragColor = vColor;
     }`;
 

@@ -8,14 +8,23 @@ let vertices = [];
 let colors = [];
 let indices = [];
 let amountOfLines = 0;
+let r, r2;
+let amplitude;
 
 function setup() {
     socket = io.connect('http://localhost:8080');
+    socket.on('receiveOSC', function(data) {
+        console.log(data.args);
+        // console.log(data.args[0].value);
+        amplitude = data.args[0].value;
+    });
     pixelDensity(1);
     // cnvs = createCanvas(windowWidth, windowWidth / 16 * 9, WEBGL);
     noCanvas();
     cnvs = document.getElementById('my_Canvas');
     gl = cnvs.getContext('webgl', { preserveDrawingBuffer: true });
+    r = new Ribbon(2, 25, 2, "left");
+    r2 = new Ribbon(2, 50, 2, "left");
     // canvasDOM = document.getElementById('my_Canvas');
     // canvasDOM = document.getElementById('defaultCanvas0');
     // gl = canvasDOM.getContext('webgl');
@@ -74,7 +83,7 @@ function draw() {
     let rectangle;
 
     rectangle = makeQuad({
-        c: [0.9, 0.2, 0.1, 0.75],
+        c: [0.0, 0.0, 0.0, 1.0],
         v: [
             [-2 + (Math.sin(t * 0.05) * osc), -2 + (Math.cos(t * 0.05) * osc)],
             [2 + (Math.sin(t * 0.015) * osc), -2 + (Math.cos(t * 0.015) * osc)],
@@ -83,97 +92,15 @@ function draw() {
         ]
     });
     addRectangleToBuffers(rectangle);
-    // let r = map(sin(frameCount * 0.15), -1, 1, 0, 1);
-    // rectangle = makeQuad({
-    //     c: [0.9, r, 1 - r, 1.0],
-    //     v: [
-    //         [-0.35 + (Math.sin(t * 0.05) * osc), 0.25 + (Math.cos(t * 0.05) * osc)],
-    //         [0.35 + (Math.sin(t * 0.015) * osc), 0.25 + (Math.cos(t * 0.015) * osc)],
-    //         [0.35 + (Math.sin(t * 0.015) * osc), 0.27 + (Math.cos(t * 0.015) * osc)],
-    //         [-0.35 + (Math.sin(t * 0.05) * osc), 0.27 + (Math.cos(t * 0.05) * osc)]
-    //     ],
-    //     blurFactor: 1
-    // });
-    // addRectangleToBuffers(rectangle);
-    // // osc = 0.02;
-    // r = map(sin(frameCount * 0.05), -1, 1, 0, 1);
-    // rectangle = makeQuad({
-    //     c: [r * 0.5, 1 - r, 1, 1.0],
-    //     v: [
-    //         [0.245 + (Math.sin(t * 0.05) * osc), 0.35 + (Math.cos(t * 0.05) * osc)],
-    //         [0.25 + (Math.sin(t * 0.05) * osc), 0.35 + (Math.cos(t * 0.05) * osc)],
-    //         [0.25 + (Math.sin(t * 0.045) * osc), -0.35 + (Math.cos(t * 0.015) * osc)],
-    //         [0.245 + (Math.sin(t * 0.045) * osc), -0.35 + (Math.cos(t * 0.015) * osc)]
-    //     ]
-    // });
-    // addRectangleToBuffers(rectangle);
 
-    // osc = 0.04;
-    // rectangle = makeQuad({
-    //     c: [0.0, 0.0, 0.0, 1.0],
-    //     v: [
-    //         [0.245 + (Math.sin(t * 0.05) * osc), 0.35 + (Math.cos(t * 0.05) * osc)],
-    //         [0.25 + (Math.sin(t * 0.05) * osc), 0.35 + (Math.cos(t * 0.05) * osc)],
-    //         [0.25 + (Math.sin(t * 0.045) * osc), -0.35 + (Math.cos(t * 0.015) * osc)],
-    //         [0.245 + (Math.sin(t * 0.045) * osc), -0.35 + (Math.cos(t * 0.015) * osc)]
-    //     ]
-    // });
-    // addRectangleToBuffers(rectangle);
+    // makeLine(0, 0, 0, 1);
 
-    // for (let i = -1.25; i < 1.25; i += 0.04) {
-    //     let blur = map(i, -1.25, 1.25, 0.01, 0.05);
-    //     let weight = map(i, -1.25, 1.25, 0.001, 0.001);
-    //     lineOptions.weight = weight;
-    //     lineOptions.blurFactor = blur;
-    //     let r = map(i, -1.25, 1.25, 0.0, 1.0);
-    //     let g = map(i, -1.25, 1.25, 0.5, 1.0);
-    //     let b = map(i, -1.25, 1.25, 1.0, 0.0);
-    //     lineOptions.r = r;
-    //     lineOptions.g = g;
-    //     lineOptions.b = b;
-    //     let x = sin(frameCount * 0.01 + i) * 0.75;
-    //     let x1 = sin(frameCount * 0.02 + i) * 0.75;
-    //     makeLine(i + x, -0.5 + x1, i + x1, 0.5 + x);
-    // }
+    // makeLine(1, 0, 1, 1);
 
-    lineOptions.weight = 0.001;
-    // lineOptions.blurFactor = 0.01;
-    amountOfLines = 0;
-    let s = 0.15;
-    for (let i = 0; i < Math.PI * 50; i += 0.5) {
-        let blur = map(i, 0, Math.PI * 50, 0.005, 0.005);
-        let weight = map(i, 0, Math.PI * 50, 0.0001, 0.005);
-        lineOptions.weight = weight;
-        lineOptions.blurFactor = blur;
-        // lineOptions.blurFactor = map(i, 0, Math.PI * 50, 0.01, 0.r1);
-        let maxG = map(sin(frameCount * 0.01), -1, 1, 0, 1);
-        let r = map(i, 0, Math.PI * 50, 1.0, 0.5);
-        // r = map(sin(i * 0.1), -1, 1, 0.0, 1.0);
-        let g = map(i, 0, Math.PI * 50, 0.5, maxG);
-        let b = map(i, 0, Math.PI * 50, 0.0, 0.2);
-        lineOptions.r = r;
-        lineOptions.g = g;
-        lineOptions.b = b;
-        let x0 = cos(frameCount * 0.025 + i) * i * s;
-        let y0 = sin(frameCount * 0.025 + i) * i * s;
-        let x1 = cos(frameCount * 0.125 + i + 1) * (i + 1) * s * 0.25;
-        let y1 = sin(frameCount * 0.125 + i + 1) * (i + 1) * s * 0.25;
-        makeLine(x0 * 1 * s, y0 * 1 * s, x1 * 1.1 * s, y1 * 1.1 * s);
-        amountOfLines++;
-    }
-
-
-
-    // var vertices = [-0.75, 0.0, 0.0, -0.5, -0.5, 0.0,
-    //     0.75, 0.0, 0.0, 0.5, 0.5, 0.0
-    // ];
-    // var colors = [0, 0, 1, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 1, 0];
-    // var indices = [3, 2, 1, 3, 1, 0];
-
-    // vertices = rectangle.vertices;
-    // colors = rectangle.colors;
-    // indices = rectangle.indices;
-    // console.log(indices);
+    r.upgrade();
+    r.show();
+    r2.upgrade();
+    r2.show();
 
     // Create an empty buffer object and store vertex data
     var vertex_buffer = gl.createBuffer();
@@ -260,17 +187,3 @@ function keyPressed() {
         }
     }
 }
-
-const supported = (() => {
-    try {
-        if (typeof WebAssembly === "object" &&
-            typeof WebAssembly.instantiate === "function") {
-            const module = new WebAssembly.Module(Uint8Array.of(0x0, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00));
-            if (module instanceof WebAssembly.Module)
-                return new WebAssembly.Instance(module) instanceof WebAssembly.Instance;
-        }
-    } catch (e) {}
-    return false;
-})();
-
-console.log(supported ? "WebAssembly is supported" : "WebAssembly is not supported");
