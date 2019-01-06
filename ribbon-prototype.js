@@ -24,17 +24,17 @@ Ribbon.prototype.upgrade = function() {
 };
 
 Ribbon.prototype.show = function() {
-    for (let i = 0; i < this.lines.length; i++) {
+    for (let i = 0; i < this.lines.length; i+= 1) {
         let x = this.lines[i].x + Math.random() * this.lines[i].blurFactor * 1;
         let xx = cos(i * 0.1 + frameCount * 0.1) * 0.05;
         xx = 0;
-        lineOptions.blurFactor = this.lines[i].blurFactor;
+        lineOptions.blurFactor = this.lines[i].blurFactor * 4;
         lineOptions.r = this.lines[i].color.r;
         lineOptions.g = this.lines[i].color.g;
         lineOptions.b = this.lines[i].color.b;
         lineOptions.a = this.lines[i].color.a;
-//         let f = frameCount * 0.1;
-//         x = cos(i + f) * 0.3;
+        let f = frameCount * 0.125;
+        x = cos(i + f * 0.25) * cos(f * 0.1) * 0.75;
         makeLine(x + xx, 1, x, -1);
     }
 };
@@ -55,6 +55,6 @@ Line.prototype.upgrade = function() {
         this.blurFactor -= 0.005;
     }
     if (this.color.a > 0.0) {
-        this.color.a -= 0.015;
+        this.color.a -= 0.025;
     }
 }
