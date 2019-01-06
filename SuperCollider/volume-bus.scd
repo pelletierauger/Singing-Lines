@@ -14,8 +14,8 @@ SynthDef.new(\volumeSynth, {
     var sig, amp, pitch;
     sig = In.ar(in, 2);
     amp = Amplitude.kr(sig);
-    pitch = Pitch.kr(sig);
-    SendReply.kr(Impulse.kr(10), '/amplitudeListener', amp, 1);
+//     pitch = Pitch.kr(sig);
+    SendReply.kr(Impulse.kr(30), '/amplitudeListener', amp, 1);
     // sig = FreeVerb.ar(sig, 0.5, 0.8, 0.001);
     Out.ar(out, sig);
 }).add;
