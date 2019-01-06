@@ -1,17 +1,18 @@
 s.boot;
 
 ~b1 = Buffer.read(s, "/Users/guillaumepelletier/Desktop/Dropbox/Création musicale/Projets Ableton Live/Avec Caroline Project/Samples/Recorded/0002 7-Audio.aif");
+~b1.numFrames;
 
 (
 SynthDef(\bpfbuff, {
-	arg buf = ~b1, rate = 1, spos = 0, pan = 1, amp = 1;
-	var sig, env, lfo;
-	env = EnvGen.kr(Env.new([0, 1, 0.5, 0], [0.1, 0.15, 0.75]), doneAction: 2);
-	sig = PlayBuf.ar(2, buf, rate * BufRateScale.ir(buf), startPos: spos);
-	sig = sig * env;
+    arg buf = ~b1, rate = 1, spos = 0, pan = 1, amp = 1;
+    var sig, env, lfo;
+    env = EnvGen.kr(Env.new([0, 1, 0.5, 0], [0.1, 0.15, 0.75]), doneAction: 2);
+    sig = PlayBuf.ar(2, ~b1, rate * BufRateScale.ir(buf), startPos: spos);
+    sig = sig * env;
     sig = sig * amp;
-	sig = Balance2.ar(sig[0], sig[1], pan, 1);
-	Out.ar(0, sig);
+    sig = Balance2.ar(sig[0], sig[1], pan, 1);
+    Out.ar(0, sig);
 }).add;
 )
 
