@@ -205,21 +205,21 @@ k = Pbind(
 
 (
 SynthDef(\percu, {
-	arg buf = ~beats[0], rate = 1, spos = 0, pan = 1, amp = 1;
-	var sig, env, lfo;
+    arg buf = ~beats[0], rate = 1, spos = 0, pan = 1, amp = 1;
+    var sig, env, lfo;
     // env = EnvGen.kr(Env.new([0, 1, 0.5, 0], [0.0001, 0.15, 0.75]), doneAction: 2);
-	sig = PlayBuf.ar(2, buf, rate * BufRateScale.ir(buf), startPos: 0, doneAction: 2);
+    sig = PlayBuf.ar(2, buf, rate * BufRateScale.ir(buf), startPos: 0, doneAction: 2);
     // sig = sig * env;
     sig = sig * amp;
-	sig = Balance2.ar(sig[0], sig[1], 0, 1);
-	Out.ar(0, sig);
+    sig = Balance2.ar(sig[0], sig[1], 0, 1);
+    Out.ar(0, sig);
 }).add;
 )
 
 (
 c.stop;
 c = Pbind(
-	\instrument, \percu,
+    \instrument, \percu,
 	\dur, Pseq([0.25], inf),
     \spos, 1717440,
     \rate, Pseq([1], inf),
@@ -232,7 +232,7 @@ c = Pbind(
 (
 ~bea2.stop;
 ~bea2 = Pbind(
-	\instrument, \percu,
+    \instrument, \percu,
     \dur, Pseq([0.25, 0.25, 0.25, 0.125, 0.125], inf),
     \spos, 1717440,
     \rate, Pseq([2], inf),
@@ -246,7 +246,7 @@ c = Pbind(
 (
 ~bea3.stop;
 ~bea3 = Pbind(
-	\instrument, \percu,
+    \instrument, \percu,
 	\dur, Pseq([0.25, 0.125, 0.125], inf),
     \spos, 1717440,
     \rate, Pseq([2], inf),
@@ -260,7 +260,7 @@ c = Pbind(
 (
 ~bea4.stop;
 ~bea4 = Pbind(
-	\instrument, \percu,
+    \instrument, \percu,
     \dur, Pseq([0.25], inf),
     \spos, 1717440,
     \rate, Pseq([8], inf),
