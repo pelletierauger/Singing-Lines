@@ -1,3 +1,12 @@
+// Initialize the Pattern Proxies
+(
+~dur = PatternProxy(Pn(0.005, inf));
+~loc = PatternProxy(Pn(712000, inf));
+~har = PatternProxy(Pn(0.midiratio, 1));
+~invHar = PatternProxy(Pn(0.midiratio, 1));
+)
+
+
 (
 p.stop;
 a = 400000;
