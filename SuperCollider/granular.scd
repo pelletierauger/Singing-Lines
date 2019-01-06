@@ -2,12 +2,12 @@
 p.stop;
 a = 400000;
 p = Pbind(
-	\instrument, \bpfbuff,
-	\dur, Pseq([~dur], inf),
-	\spos, Pwhite(1047552 - 850000 + ~loc, 1047552 - 840000 + ~loc, inf).round,
+    \instrument, \bpfbuff,
+    \dur, Pseq([~dur], inf),
+    \spos, Pwhite(1047552 - 850000 + ~loc, 1047552 - 840000 + ~loc, inf).round,
     \rate, Pseq([1 * ~har, 1 * -7.midiratio, 1 * 5.midiratio], inf),
     \amp, Pseq([0.5], inf),
-	\pan, Pwhite(-1, 1, inf)
+    \pan, Pwhite(-1, 1, inf)
 ).play;
 )
 
@@ -20,6 +20,7 @@ p = Pbind(
 ~loc.source = Pn(370000, inf);
 // ~loc.source;
 
+~har = PatternProxy(Pn(1, 1));
 ~har.source = Pn(0.midiratio, 1);
 ~har.source = Pn(-2.midiratio, 1);
 
@@ -31,7 +32,7 @@ p = Pbind(
 (
 ~har.source = Pn(0.midiratio, 1);
 ~invHar.source = Pn(0.midiratio, 1);
-~bea4.stop;
+// ~bea4.stop;
 )
 
 (
@@ -77,14 +78,14 @@ s.stopRecording;
 
 (
 SynthDef(\mandoline, {
-	arg buf = ~mando, rate = 1, spos = 0, pan = 1, amp = 1;
-	var sig, env, lfo;
-	env = EnvGen.kr(Env.new([0, 1, 0.5, 0], [0.1, 0.15, 0.75]), doneAction: 2);
-	sig = PlayBuf.ar(2, buf, rate * BufRateScale.ir(buf), startPos: spos);
-	sig = sig * env;
+    arg buf = ~mando, rate = 1, spos = 0, pan = 1, amp = 1, out = 0;
+    var sig, env, lfo;
+    env = EnvGen.kr(Env.new([0, 1, 0.5, 0], [0.1, 0.15, 0.75]), doneAction: 2);
+    sig = PlayBuf.ar(2, buf, rate * BufRateScale.ir(buf), startPos: spos);
+    sig = sig * env;
     sig = sig * amp;
-	sig = Balance2.ar(sig[0], sig[1], pan, 1);
-	Out.ar(0, sig);
+    sig = Balance2.ar(sig[0], sig[1], pan, 1);
+    Out.ar(out, sig);
 }).add;
 )
 
@@ -99,30 +100,25 @@ m = Pbind(
     // \dur, Pseq([1, 0.5, 0.25, 0.25], inf),
     // \spos, 917440,
     // \spos, 1217440,
-
     // lower energy
     // \spos, 1717440,
-
         // lower energy
     // with the major chord, subtle shimmer
     \spos, 2417440,
-
             // lower energy
     // with the minor chord, dramatic
     \spos, 3417440,
-
     // more dramatic ?
     // \spos, 4617440,
-
                 // lower energy
     // \spos, 3817440,
-
     // \spos, Pwhite(1047552 - 850000 + ~loc, 1047552 - 840000 + ~loc, inf).round,
     \rate, Pseq([0.35, 1.2 * ~invHar], inf),
     // \rate, Pseq([0.35], inf),
     \amp, Pseq([~volMando], inf),
 	\pan, Pwhite(-1, 1, inf),
-    \buf, ~mando
+    \buf, ~mando,
+    \out, ~volumeBus
 ).play(quant: 1);
 )
 
