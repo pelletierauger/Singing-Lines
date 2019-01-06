@@ -1,3 +1,5 @@
+s.boot;
+
 
 (
 ~sourceGroup = Group.new;
@@ -8,14 +10,14 @@
 
 (
 SynthDef.new(\volumeSynth, {
-	arg in, out = 0;
-	var sig, amp, pitch;
-	sig = In.ar(in, 2);
+    arg in, out = 0;
+    var sig, amp, pitch;
+    sig = In.ar(in, 2);
     amp = Amplitude.kr(sig);
     pitch = Pitch.kr(sig);
     SendReply.kr(Impulse.kr(10), '/amplitudeListener', amp, 1);
-	// sig = FreeVerb.ar(sig, 0.5, 0.8, 0.001);
-	Out.ar(out, sig);
+    // sig = FreeVerb.ar(sig, 0.5, 0.8, 0.001);
+    Out.ar(out, sig);
 }).add;
 )
 
