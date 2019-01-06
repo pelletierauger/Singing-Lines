@@ -11,4 +11,14 @@
 (
 p.stop;
 m.stop;
+c.stop;
 )
+
+(
+k.stop;
+~bea2.stop;
+~bea3.stop;
+~bea4.stop;
+)
+
+~mic.free;
