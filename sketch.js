@@ -14,7 +14,7 @@ let amplitude;
 function setup() {
     socket = io.connect('http://localhost:8080');
     socket.on('receiveOSC', function(data) {
-        console.log(data.args);
+//         console.log(data.args);
         // console.log(data.args[0].value);
         amplitude = data.args[0].value;
     });
@@ -70,20 +70,17 @@ function setup() {
 }
 let ww;
 
-function draw() {
+draw = function() {
     ww = map(sin(frameCount * 0.05), -1, 1, 0.05, 1);
     rectangles = 0;
-
     let t = frameCount * 5;
     let osc = 0.1;
     vertices = [];
     colors = [];
     indices = [];
-
     let rectangle;
-
     rectangle = makeQuad({
-        c: [0.0, 0.0, 0.0, 1.0],
+        c: [0.7, 0.0, 0.2, 1.0],
         v: [
             [-2 + (Math.sin(t * 0.05) * osc), -2 + (Math.cos(t * 0.05) * osc)],
             [2 + (Math.sin(t * 0.015) * osc), -2 + (Math.cos(t * 0.015) * osc)],
@@ -92,63 +89,46 @@ function draw() {
         ]
     });
     addRectangleToBuffers(rectangle);
-
     // makeLine(0, 0, 0, 1);
-
     // makeLine(1, 0, 1, 1);
-
     r.upgrade();
     r.show();
     r2.upgrade();
     r2.show();
-
     // Create an empty buffer object and store vertex data
     var vertex_buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
-
     // Create an empty buffer object and store Index data
     var Index_Buffer = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, Index_Buffer);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
-
     // Create an empty buffer object and store color data
     var color_buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, color_buffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
-
     setShaders();
     /* ======== Associating shaders to buffer objects =======*/
-
     // Bind vertex buffer object
     gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
-
     // Bind index buffer object
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, Index_Buffer);
-
     // Get the attribute location
     var coord = gl.getAttribLocation(shaderProgram, "coordinates");
-
     // point an attribute to the currently bound VBO
     gl.vertexAttribPointer(coord, 3, gl.FLOAT, false, 0, 0);
-
     // Enable the attribute
     gl.enableVertexAttribArray(coord);
-
     // bind the color buffer
     gl.bindBuffer(gl.ARRAY_BUFFER, color_buffer);
-
     // get the attribute location
     var color = gl.getAttribLocation(shaderProgram, "color");
-
     // point attribute to the volor buffer object
     gl.vertexAttribPointer(color, 4, gl.FLOAT, false, 0, 0);
-
     // enable the color attribute
     gl.enableVertexAttribArray(color);
-
     /*============Drawing the Quad====================*/
     // gl.clear(gl.COLOR_BUFFER_BIT);
     // gl.colorMask(false, false, false, true);
@@ -159,7 +139,6 @@ function draw() {
     // gl.blendFunc(gl.SRC_ALPHA, gl.DST_ALPHA);
     //Draw the triangle
     gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
-
     if (exporting && frameCount < maxFrames) {
         frameExport();
     }
