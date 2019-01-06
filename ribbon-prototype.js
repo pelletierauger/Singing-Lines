@@ -33,6 +33,8 @@ Ribbon.prototype.show = function() {
         lineOptions.g = this.lines[i].color.g;
         lineOptions.b = this.lines[i].color.b;
         lineOptions.a = this.lines[i].color.a;
+//         let f = frameCount * 0.1;
+//         x = cos(i + f) * 0.3;
         makeLine(x + xx, 1, x, -1);
     }
 };
@@ -53,6 +55,6 @@ Line.prototype.upgrade = function() {
         this.blurFactor -= 0.005;
     }
     if (this.color.a > 0.0) {
-        this.color.a -= 0.0125;
+        this.color.a -= 0.015;
     }
 }
