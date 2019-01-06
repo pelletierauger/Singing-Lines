@@ -80,7 +80,7 @@ draw = function() {
     indices = [];
     let rectangle;
     rectangle = makeQuad({
-        c: [0.7, 0.0, 0.2, 1.0],
+        c: [0.0, 0.0, 0., 1.0],
         v: [
             [-2 + (Math.sin(t * 0.05) * osc), -2 + (Math.cos(t * 0.05) * osc)],
             [2 + (Math.sin(t * 0.015) * osc), -2 + (Math.cos(t * 0.015) * osc)],
