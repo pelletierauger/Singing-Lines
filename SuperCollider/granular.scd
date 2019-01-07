@@ -4,6 +4,7 @@
 ~loc = PatternProxy(Pn(712000, inf));
 ~har = PatternProxy(Pn(0.midiratio, 1));
 ~invHar = PatternProxy(Pn(0.midiratio, 1));
+~volMando = PatternProxy(Pn(0.1, 1));
 )
 
 
@@ -41,13 +42,14 @@ p = Pbind(
 (
 ~har.source = Pn(0.midiratio, 1);
 ~invHar.source = Pn(0.midiratio, 1);
-// ~bea4.stop;
+// c.play(quant: 1);
+~bea2.stop;
 )
 
 (
 ~har.source = Pn(-2.midiratio, 1);
 ~invHar.source = Pn(10.midiratio, 1);
-~bea4.play;
+~bea2.play(quant: 0.5);
 )
 
 
@@ -55,6 +57,7 @@ p = Pbind(
 ~har.source = Pn(0.midiratio, 1);
 ~invHar.source = Pn(0.midiratio, 1);
 ~loc.source = Pn(320000, inf);
+~bea2.stop;
 )
 
 
@@ -63,16 +66,11 @@ p = Pbind(
 ~har.source = Pn(0.midiratio, 1);
 ~invHar.source = Pn(0.midiratio, 1);
 ~loc.source = Pn(370000, inf);
+~bea3.play(quant: 0.5);
 )
 
 ~malletOctave = PatternProxy(Pn(1, 1));
 ~malletOctave.source = Pn(4, 1);
-
-s.record;
-s.stopRecording;
-
-
-
 
 
 ~mando = Buffer.read(s, "/Users/guillaumepelletier/Desktop/Dropbox/Création musicale/Projets Ableton Live/La patate du dix-neuf Project/Samples/Recorded/0007 Mandoline 1.aif");
@@ -127,12 +125,13 @@ m = Pbind(
     \amp, Pseq([~volMando], inf),
 	\pan, Pwhite(-1, 1, inf),
     \buf, ~mando,
-    \out, ~volumeBus
+//     \out, 0,
+    \out, ~reverbBus
+//     \out, ~volumeBus
 ).play(quant: 1);
 )
 
-~volMando = PatternProxy(Pn(1, 1));
-~volMando.source = Pn(0.2765, 1);
+~volMando.source = Pn(0.2, 1);
 
 
 (
@@ -219,9 +218,9 @@ SynthDef(\percu, {
     // env = EnvGen.kr(Env.new([0, 1, 0.5, 0], [0.0001, 0.15, 0.75]), doneAction: 2);
     sig = PlayBuf.ar(2, buf, rate * BufRateScale.ir(buf), startPos: 0, doneAction: 2);
     // sig = sig * env;
-    sig = sig * amp;
+    sig = sig * amp * 2;
     sig = Balance2.ar(sig[0], sig[1], 0, 1);
-    Out.ar(0, sig);
+    Out.ar(~volumeBus, sig);
 }).add;
 )
 
@@ -232,7 +231,7 @@ c = Pbind(
 	\dur, Pseq([0.25], inf),
     \spos, 1717440,
     \rate, Pseq([1], inf),
-    \amp, Pseq([1, 0, 1, 1], inf),
+    \amp, Pseq([1, 0, 0, 0], inf),
 	\pan, Pwhite(-1, 1, inf),
     \buf, Pseq([~beats[0], ~beats[1], ~beats[2], ~beats[3]], inf),
 ).play(quant: 1);
@@ -276,5 +275,5 @@ c = Pbind(
     \amp, Pseq([0, 4], inf),
 	\pan, Pwhite(-1, 1, inf),
     \buf, Pseq([~beats[2]], inf),
-).play(quant: 0.5);
+).play(quant: 1);
 )
