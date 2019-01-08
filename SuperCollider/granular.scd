@@ -37,19 +37,19 @@ p = Pbind(
 ~invHar = PatternProxy(Pn(1, 1));
 ~invHar.source = Pn(0.midiratio, 1);
 
-
-
 (
 ~har.source = Pn(0.midiratio, 1);
 ~invHar.source = Pn(0.midiratio, 1);
 // c.play(quant: 1);
-~bea2.stop;
+// ~bea2.stop;
+// ~bea4.stop;
 )
 
 (
 ~har.source = Pn(-2.midiratio, 1);
 ~invHar.source = Pn(10.midiratio, 1);
 ~bea2.play(quant: 0.5);
+// ~bea4.play(quant: 1);
 )
 
 
@@ -57,17 +57,22 @@ p = Pbind(
 ~har.source = Pn(0.midiratio, 1);
 ~invHar.source = Pn(0.midiratio, 1);
 ~loc.source = Pn(320000, inf);
-~bea2.stop;
+// ~bea2.stop;
 )
 
 
-
+// Grand jour
 (
 ~har.source = Pn(0.midiratio, 1);
 ~invHar.source = Pn(0.midiratio, 1);
 ~loc.source = Pn(370000, inf);
 ~bea3.play(quant: 0.5);
 )
+
+// Progressively brighter
+~loc.source = Pn(Pseq([370000, 370000, 400000], inf), inf);
+~loc.source = Pn(Pseq([370000, 400000], inf), inf);
+
 
 ~malletOctave = PatternProxy(Pn(1, 1));
 ~malletOctave.source = Pn(4, 1);
@@ -113,7 +118,7 @@ m = Pbind(
     // with the major chord, subtle shimmer
     \spos, 2417440,
             // lower energy
-    // with the minor chord, dramatic
+//     with the minor chord, dramatic
     \spos, 3417440,
     // more dramatic ?
     // \spos, 4617440,
@@ -131,7 +136,7 @@ m = Pbind(
 ).play(quant: 1);
 )
 
-~volMando.source = Pn(0.2, 1);
+~volMando.source = Pn(0.1, 1);
 
 
 (
@@ -183,7 +188,7 @@ k = Pbind(
 
             // lower energy
     // with the minor chord, dramatic
-    // \spos, 3417440,
+//     \spos, 3417440,
 
     // more dramatic ?
     // \spos, 4617440,
