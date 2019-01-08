@@ -14,9 +14,14 @@ let amplitude;
 function setup() {
     socket = io.connect('http://localhost:8080');
     socket.on('receiveOSC', function(data) {
-//         console.log(data.args);
+        // console.log(data);
         // console.log(data.args[0].value);
-        amplitude = data.args[0].value;
+        if (data.address == "/amplitude") {
+            amplitude = data.args[0].value;
+        } else if (data.address == "/newcolor") {
+            palette = seedPalette();
+            console.log("The palette was changed!!!");
+        }
     });
     pixelDensity(1);
     // cnvs = createCanvas(windowWidth, windowWidth / 16 * 9, WEBGL);
@@ -70,6 +75,8 @@ function setup() {
 }
 let ww;
 
+palette = seedPalette();
+
 draw = function() {
     ww = map(sin(frameCount * 0.05), -1, 1, 0.05, 1);
     rectangles = 0;
@@ -78,9 +85,24 @@ draw = function() {
     vertices = [];
     colors = [];
     indices = [];
+    let pal = getColor(sin(frameCount * 0.01) * 50);
+    //     pal.r = 1 - pal.r;
+    //     pal.g = 1 - pal.g;
+    //     pal.b = 1 - pal.b;
+    pal.r *= 0.25;
+    pal.g *= 0.25;
+    pal.b *= 0.25;
+
+
+    if (inversePalette) {
+        pal.r = 1 - pal.r;
+        pal.g = 1 - pal.g;
+        pal.b = 1 - pal.b;
+    }
+
     let rectangle;
     rectangle = makeQuad({
-        c: [0.0, 0.0, 0., 1.0],
+        c: [pal.r, pal.g, pal.b, 1.0],
         v: [
             [-2 + (Math.sin(t * 0.05) * osc), -2 + (Math.cos(t * 0.05) * osc)],
             [2 + (Math.sin(t * 0.015) * osc), -2 + (Math.cos(t * 0.015) * osc)],
@@ -93,8 +115,8 @@ draw = function() {
     // makeLine(1, 0, 1, 1);
     r.upgrade();
     r.show();
-    r2.upgrade();
-    r2.show();
+    //     r2.upgrade();
+    //     r2.show();
     // Create an empty buffer object and store vertex data
     var vertex_buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
