@@ -38,18 +38,22 @@ p = Pbind(
 ~invHar.source = Pn(0.midiratio, 1);
 
 (
+// Jour
 ~har.source = Pn(0.midiratio, 1);
 ~invHar.source = Pn(0.midiratio, 1);
+~toOSC.sendMsg("/newcolor", 0);
 // c.play(quant: 1);
 // ~bea2.stop;
 // ~bea4.stop;
 )
 
 (
+// Soir
 ~har.source = Pn(-2.midiratio, 1);
 ~invHar.source = Pn(10.midiratio, 1);
 ~bea2.play(quant: 0.5);
-// ~bea4.play(quant: 1);
+~toOSC.sendMsg("/newcolor", 0);
+~bea4.play(quant: 1);
 )
 
 
@@ -57,6 +61,7 @@ p = Pbind(
 ~har.source = Pn(0.midiratio, 1);
 ~invHar.source = Pn(0.midiratio, 1);
 ~loc.source = Pn(320000, inf);
+~toOSC.sendMsg("/newcolor", 0);
 // ~bea2.stop;
 )
 
@@ -67,6 +72,7 @@ p = Pbind(
 ~invHar.source = Pn(0.midiratio, 1);
 ~loc.source = Pn(370000, inf);
 ~bea3.play(quant: 0.5);
+~toOSC.sendMsg("/newcolor", 0);
 )
 
 // Progressively brighter
@@ -198,7 +204,7 @@ k = Pbind(
 
     // \spos, Pwhite(1047552 - 850000 + ~loc, 1047552 - 840000 + ~loc, inf).round,
     \rate, Pseq([0.35, 1.2 * ~invHar], inf),
-    \amp, Pseq([~volMando], inf),
+    \amp, Pseq([~volMando] * 0.5, inf),
 	\pan, Pwhite(-1, 1, inf),
     \buf, ~mando
 ).play(quant: 1);
