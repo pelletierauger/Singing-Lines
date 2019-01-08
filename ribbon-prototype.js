@@ -1,3 +1,7 @@
+let palette, inversePalette;
+inversePalette = false;
+
+
 let Ribbon = function(width, amountOfLines, speed, direction) {
     this.width = width;
     this.amountOfLines = amountOfLines;
@@ -24,25 +28,27 @@ Ribbon.prototype.upgrade = function() {
 };
 
 Ribbon.prototype.show = function() {
-    for (let i = 0; i < this.lines.length; i+= 1) {
+    for (let i = 0; i < this.lines.length; i += 1) {
         let x = this.lines[i].x + Math.random() * this.lines[i].blurFactor * 1;
         let xx = cos(i * 0.1 + frameCount * 0.1) * 0.05;
         xx = 0;
         lineOptions.blurFactor = this.lines[i].blurFactor * 1;
-        lineOptions.r = this.lines[i].color.r;
-        lineOptions.g = this.lines[i].color.g;
-        lineOptions.b = this.lines[i].color.b;
+
+        let color = getColor(i + frameCount * 1);
+        lineOptions.r = color.r;
+        lineOptions.g = color.g;
+        lineOptions.b = color.b;
         lineOptions.a = this.lines[i].color.a;
-        let f = frameCount * 0.25;
-        x = cos(i + f * 0.25) * cos(f * 0.125) * 0.75;
+        let f = frameCount * 0.01;
+        //         x = cos(i + f * 0.25) * cos(f * 0.125) * 0.75;
         let f2 = frameCount * 0.125 * 0.5;
         x2 = cos(i + f2 * 0.25) * cos(f2 * 0.125) * 0.75;
         let f3 = (frameCount + 1) * 0.25;
         x3 = cos(i + f3 * 0.25) * cos(f3 * 0.125) * 0.75;
-        if (x3 > x) {
-            makeLine(x + xx, 1, x, -1);
-        }
-        
+        //         if (x3 > x) {
+        makeLine(x + xx, 1, x, -1);
+        //         }
+
     }
 };
 
@@ -65,3 +71,41 @@ Line.prototype.upgrade = function() {
         this.color.a -= 0.0125;
     }
 }
+
+seedPalette = function() {
+    return {
+        name: "randomlyGenerated",
+        data: {
+            redOsc: Math.floor(Math.random() * 10),
+            redMin: Math.floor(Math.random() * 255),
+            redMax: Math.floor(Math.random() * 255),
+            greenOsc: Math.floor(Math.random() * 10),
+            greenMin: Math.floor(Math.random() * 255),
+            greenMax: Math.floor(Math.random() * 255),
+            blueOsc: Math.floor(Math.random() * 10),
+            blueMin: Math.floor(Math.random() * 255),
+            blueMax: Math.floor(Math.random() * 255)
+        }
+    }
+}
+
+getColor = function(c) {
+    //     let inversePalette = true;
+    let p = palette.data;
+    let red = map(sin(c / p.redOsc), -1, 1, p.redMin, p.redMax);
+    let green = map(sin(c / p.greenOsc), -1, 1, p.greenMin, p.greenMax);
+    let blue = map(sin(c / p.blueOsc), 1, -1, p.blueMin, p.blueMax);
+    if (inversePalette) {
+        red = 255 - red;
+        green = 255 - red;
+        blue = 255 - blue;
+    }
+    return {
+        r: red /  255,
+        g: green /  255,
+        b: blue /  255
+    }
+};
+
+// inversePalette = !inversePalette;
+palette = seedPalette();
