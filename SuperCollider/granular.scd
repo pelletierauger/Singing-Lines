@@ -4,9 +4,38 @@
 ~loc = PatternProxy(Pn(712000, inf));
 ~har = PatternProxy(Pn(0.midiratio, 1));
 ~invHar = PatternProxy(Pn(0.midiratio, 1));
-~volMando = PatternProxy(Pn(0.1, 1));
+~mando1Amp = PatternProxy(Pn(0.05, 1));
+~mando1Pos = PatternProxy(Pn(3417440, 1));
+~beat1Amp = PatternProxy(Pseq([1, 0, 0, 0], inf));
+~beat1Amp.quant = 1;
 )
 
+// Reset the Pattern Proxies
+(
+~dur.source = Pn(0.005, inf);
+~loc.source = Pn(712000, inf);
+~har.source = Pn(0.midiratio, 1);
+~invHar.source = Pn(0.midiratio, 1);
+~mando1Amp.source = Pn(0.05, 1);
+~mando1Pos.source = Pn(3417440, 1);
+~beat1Amp.source = Pseq([1, 0, 0, 0], inf);
+~toOSC.sendMsg("/blurScalar", 1);
+)
+
+
+(
+~beat1Amp.source = Pseq([1, 0, 2, 0], inf);
+~beat5.reset;
+~beat5.play(quant: 1);
+)
+
+
+~beat1.reset;
+~beat1.play(quant: 1);
+~beat1.stop;
+~mando1.stop;
+~mando1.play(quant: 1);
+~mando1Amp.source = Pn(0.35, 1);
 
 (
 p.stop;
@@ -37,23 +66,35 @@ p = Pbind(
 ~invHar = PatternProxy(Pn(1, 1));
 ~invHar.source = Pn(0.midiratio, 1);
 
+~beat1Amp.source = Pseq([1, 0, 0, 0], inf);
+
+~beat1.play(quant: 1);
+~mando1.play(quant: 1);
+
 (
 // Jour
 ~har.source = Pn(0.midiratio, 1);
 ~invHar.source = Pn(0.midiratio, 1);
 ~toOSC.sendMsg("/newcolor", 0);
-// c.play(quant: 1);
-// ~bea2.stop;
-// ~bea4.stop;
+// ~beat1.play(quant: 1);
+// ~beat2.stop;
+// ~beat4.stop;
+// ~loc.source = Pn(Pseq([370000, 370000, 400000], inf), inf);
 )
 
 (
 // Soir
 ~har.source = Pn(-2.midiratio, 1);
 ~invHar.source = Pn(10.midiratio, 1);
-~bea2.play(quant: 0.5);
+
+// ~beat1Amp.source = Pseq([1, 0, 2, 2], inf);
+// ~beat2.reset;
+// ~beat2.play(quant: 1);
+
 ~toOSC.sendMsg("/newcolor", 0);
-~bea4.play(quant: 1);
+// ~beat4.play(quant: 1);
+// ~loc.source = Pn(Pseq([370000, 400000], inf), inf);
+~toOSC.sendMsg("/blurScalar", 3);
 )
 
 
@@ -62,6 +103,7 @@ p = Pbind(
 ~invHar.source = Pn(0.midiratio, 1);
 ~loc.source = Pn(320000, inf);
 ~toOSC.sendMsg("/newcolor", 0);
+~toOSC.sendMsg("/blurScalar", 2);
 // ~bea2.stop;
 )
 
@@ -71,8 +113,12 @@ p = Pbind(
 ~har.source = Pn(0.midiratio, 1);
 ~invHar.source = Pn(0.midiratio, 1);
 ~loc.source = Pn(370000, inf);
+~bea3.reset;
 ~bea3.play(quant: 0.5);
 ~toOSC.sendMsg("/newcolor", 0);
+~mando1Pos.source = Pn(2417440, 1);
+~mando1Amp.source = Pn(1.5, 1);
+~toOSC.sendMsg("/blurScalar", 3);
 )
 
 // Progressively brighter
@@ -110,8 +156,8 @@ SynthDef(\mandoline, {
 
 
 (
-m.stop;
-m = Pbind(
+~mando1.stop;
+~mando1 = Pbind(
 	\instrument, \mandoline,
     // \dur, Pseq([0.5, 0.5, 0.25, 0.25], inf),
 	\dur, Pseq([0.25, 0.25, 0.125, 0.125], inf),
@@ -131,18 +177,21 @@ m = Pbind(
                 // lower energy
     // \spos, 3817440,
     // \spos, Pwhite(1047552 - 850000 + ~loc, 1047552 - 840000 + ~loc, inf).round,
+    \spos, Pseq([~mando1Pos], inf),
     \rate, Pseq([0.35, 1.2 * ~invHar], inf),
     // \rate, Pseq([0.35], inf),
-    \amp, Pseq([~volMando], inf),
+    \amp, Pseq([~mando1Amp], inf),
 	\pan, Pwhite(-1, 1, inf),
     \buf, ~mando,
 //     \out, 0,
     \out, ~reverbBus
 //     \out, ~volumeBus
 ).play(quant: 1);
+~mando1.stop;
 )
 
-~volMando.source = Pn(0.1, 1);
+~mando1Pos.source = Pn(2417440, 1);
+~mando1Amp.source = Pn(0.5, 1);
 
 
 (
@@ -224,61 +273,93 @@ k = Pbind(
 
 (
 SynthDef(\percu, {
-    arg buf = ~beats[0], rate = 1, spos = 0, pan = 1, amp = 1;
+    arg buf = ~beats[0], rate = 1, spos = 0, pan = 1, amp = 1, out = ~volumeBus;
     var sig, env, lfo;
     // env = EnvGen.kr(Env.new([0, 1, 0.5, 0], [0.0001, 0.15, 0.75]), doneAction: 2);
     sig = PlayBuf.ar(2, buf, rate * BufRateScale.ir(buf), startPos: 0, doneAction: 2);
     // sig = sig * env;
     sig = sig * amp * 2;
     sig = Balance2.ar(sig[0], sig[1], 0, 1);
-    Out.ar(~volumeBus, sig);
+    Out.ar(out, sig);
 }).add;
 )
 
+
+
+
 (
-c.stop;
-c = Pbind(
+~beat1.stop;
+~beat1 = Pbind(
     \instrument, \percu,
 	\dur, Pseq([0.25], inf),
     \spos, 1717440,
     \rate, Pseq([1], inf),
-    \amp, Pseq([1, 0, 0, 0], inf),
+    \amp, ~beat1Amp,
 	\pan, Pwhite(-1, 1, inf),
     \buf, Pseq([~beats[0], ~beats[1], ~beats[2], ~beats[3]], inf),
+    \out, ~volumeBus
 ).play(quant: 1);
+~beat1.stop;
+~beat1.reset;
 )
 
 (
-~bea2.stop;
-~bea2 = Pbind(
+~myFirstFunction = {
+    ~beat1.play(quant: 1);
+    ~beat4.play(quant: 1);
+};
+)
+~myFirstFunction.value;
+
+PatternProxy.defaultQuant = 1;
+
+f = { "Function evaluated".postln; };
+f.value;
+
+~beat1Amp = PatternProxy(Pseq([1, 0, 0, 0], inf));
+PatternProxy.defaultQuant = 1;
+PatternProxy.defaultQuant;
+~beat1.play(quant: 1);
+~beat1Amp.source = Pseq([1, 0, 2, 0], inf);
+PatternProxy.defaultValue;
+~beat1Amp.quant = 1;
+
+(
+~beat2.stop;
+~beat2 = Pbind(
     \instrument, \percu,
     \dur, Pseq([0.25, 0.25, 0.25, 0.125, 0.125], inf),
     \spos, 1717440,
     \rate, Pseq([2], inf),
-    \amp, Pseq([0, 0, 1, 1, 1], inf),
+    \amp, Pseq([0, 0, 1.5, 1.5, 1.5], inf),
 	\pan, Pwhite(-1, 1, inf),
     \buf, Pseq([~beats[0], ~beats[1], ~beats[2], ~beats[2]], inf),
+    \out, ~volumeBus
 ).play(quant: 1);
+~beat2.stop;
 )
 
+~beat2.reset;
+~beat2.play(quant: 1);
 
 (
-~bea3.stop;
-~bea3 = Pbind(
+~beat3.stop;
+~beat3 = Pbind(
     \instrument, \percu,
 	\dur, Pseq([0.25, 0.125, 0.125], inf),
     \spos, 1717440,
     \rate, Pseq([2], inf),
-    \amp, Pseq([1], inf),
+    \amp, Pseq([2.25], inf),
 	\pan, Pwhite(-1, 1, inf),
     \buf, Pseq([~beats[0]], inf),
 ).play(quant: 1);
+// ~beat3.stop;
 )
 
 
 (
-~bea4.stop;
-~bea4 = Pbind(
+~beat4.stop;
+~beat4 = Pbind(
     \instrument, \percu,
     \dur, Pseq([0.25], inf),
     \spos, 1717440,
@@ -287,4 +368,24 @@ c = Pbind(
 	\pan, Pwhite(-1, 1, inf),
     \buf, Pseq([~beats[2]], inf),
 ).play(quant: 1);
+~beat4.stop;
+)
+
+
+
+
+
+(
+~beat5.stop;
+~beat5 = Pbind(
+    \instrument, \percu,
+	\dur, Pseq([0.25, 0.25, 0.25, 0.125, 0.125], inf),
+    \spos, 1717440,
+    \rate, Pseq([0.125, 0.25], inf),
+    \amp, Pseq([2], inf),
+	\pan, Pwhite(-1, 1, inf),
+    \buf, Pseq([~beats[0]], inf),
+    \out, 0
+).play(quant: 1);
+// ~beat3.stop;
 )
