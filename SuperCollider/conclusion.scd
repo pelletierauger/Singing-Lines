@@ -11,16 +11,29 @@
 
 (
 p.stop;
-m.stop;
-c.stop;
+~mando1.stop;
+~beat1.stop;
+)
+
+
+(
+~mando1.stop;
+~beat1.stop;
+~beat2.stop;
 )
 
 (
 k.stop;
-c.stop;
-~bea2.stop;
-~bea3.stop;
-~bea4.stop;
+~beat1.stop;
+~beat2.stop;
+~beat3.stop;
+~beat4.stop;
+~beat5.stop;
+)
+
+(
+p.stop;
+~beat5.stop;
 )
 
 ~mic.free;
