@@ -32,9 +32,9 @@ Ribbon.prototype.show = function() {
         let x = this.lines[i].x + Math.random() * this.lines[i].blurFactor * 1;
         let xx = cos(i * 0.1 + frameCount * 0.1) * 0.05;
         xx = 0;
-        lineOptions.blurFactor = this.lines[i].blurFactor * 1;
-
+        lineOptions.blurFactor = this.lines[i].blurFactor * blurScalar;
         let color = getColor(i + frameCount * 1);
+        color.b -= 0.2;
         lineOptions.r = color.r;
         lineOptions.g = color.g;
         lineOptions.b = color.b;
@@ -48,7 +48,6 @@ Ribbon.prototype.show = function() {
         //         if (x3 > x) {
         makeLine(x + xx, 1, x, -1);
         //         }
-
     }
 };
 
@@ -107,5 +106,10 @@ getColor = function(c) {
     }
 };
 
+choosePalette();
 // inversePalette = !inversePalette;
 palette = seedPalette();
+
+function choosePalette() {
+    palette = random(palettes);
+}
