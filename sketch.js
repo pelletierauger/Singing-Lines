@@ -10,6 +10,7 @@ let indices = [];
 let amountOfLines = 0;
 let r, r2;
 let amplitude;
+let blurScalar = 1;
 
 function setup() {
     socket = io.connect('http://localhost:8080');
@@ -20,7 +21,14 @@ function setup() {
             amplitude = data.args[0].value;
         } else if (data.address == "/newcolor") {
             palette = seedPalette();
-            console.log("The palette was changed!!!");
+            // console.log("The palette was changed!!!");
+        } else if (data.address == "/blurScalar") {
+            console.log(data);
+            blurScalar = data.args[0].value;
+            // console.log("The palette was changed!!!");
+        } else if (data.address == "/getPalette") {
+            palette = getPalette(data.args[0].value);
+            // console.log("The palette was changed!!!");
         }
     });
     pixelDensity(1);
@@ -92,14 +100,12 @@ draw = function() {
     pal.r *= 0.25;
     pal.g *= 0.25;
     pal.b *= 0.25;
-
-
+    pal.b -= 0.2;
     if (inversePalette) {
         pal.r = 1 - pal.r;
         pal.g = 1 - pal.g;
         pal.b = 1 - pal.b;
     }
-
     let rectangle;
     rectangle = makeQuad({
         c: [pal.r, pal.g, pal.b, 1.0],
