@@ -97,14 +97,15 @@ draw = function() {
     //     pal.r = 1 - pal.r;
     //     pal.g = 1 - pal.g;
     //     pal.b = 1 - pal.b;
-    pal.r *= 0.25;
+    if (!inversePalette) {
+        pal.r *= 0.25;
     pal.g *= 0.25;
     pal.b *= 0.25;
     pal.b -= 0.2;
-    if (inversePalette) {
-        pal.r = 1 - pal.r;
-        pal.g = 1 - pal.g;
-        pal.b = 1 - pal.b;
+    } else {
+//         pal.r = 1 - pal.r;
+//         pal.g = 1 - pal.g;
+//         pal.b = 1 - pal.b;
     }
     let rectangle;
     rectangle = makeQuad({

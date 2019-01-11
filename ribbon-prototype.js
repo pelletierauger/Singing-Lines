@@ -39,6 +39,15 @@ Ribbon.prototype.show = function() {
         lineOptions.g = color.g;
         lineOptions.b = color.b;
         lineOptions.a = this.lines[i].color.a;
+        
+        if (!inversePalette) {
+            
+        } else {
+            lineOptions.r *= 0.25;
+            lineOptions.g *= 0.25;
+            lineOptions.b *= 0.25;
+            lineOptions.b -= 0.2;
+        }
         let f = frameCount * 0.01;
         //         x = cos(i + f * 0.25) * cos(f * 0.125) * 0.75;
         let f2 = frameCount * 0.125 * 0.5;
@@ -107,7 +116,7 @@ getColor = function(c) {
 };
 
 // choosePalette();
-// inversePalette = !inversePalette;
+inversePalette = !inversePalette;
 palette = seedPalette();
 
 function choosePalette() {
