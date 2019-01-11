@@ -1,6 +1,6 @@
 (
 SynthDef(\pulse, {
-	arg freq = 440, pul1 = 1, pul2 = 1, pan = 0;
+	arg freq = 440, pul1 = 1, pul2 = 1, pan = 0, out = 0, amp = 1;
 	var sig, mod, lp, sp, env;
     mod = SinOsc.kr(freq) * 3;
     // sp = abs(SinOsc.kr(0.1)) * 220;
@@ -15,10 +15,11 @@ SynthDef(\pulse, {
     sig = sig * env;
     // sig = sig * mod;
     sig = sig * 1.2;
+    sig = sig * amp;
     // sig = sig * amp;
     // sig = Pan2(sig, pan);
     sig = Balance2.ar(sig[0], sig[1], pan, 1);
-	Out.ar(0, sig);
+	Out.ar(out, sig);
 }).add;
 )
 
@@ -67,10 +68,13 @@ t = Pbind(
     // \out, ~wahwahBus,
 	// \spos, Pwhite(0, 592896, inf).round,
     // \rate, Pseq([1 * -11.midiratio, 1 * -4.midiratio, 1 * -16.midiratio], inf),
-	\pan, Pwhite(-0.5, 0.5, inf)
+	\pan, Pwhite(-0.5, 0.5, inf),
+    \amp, 2,
+    \out, [~volumeBus, 0]
 ).play(quant: 1);
 )
-
+6644.88 * 0.5;
+i = Synth.new(\pulse, [\freq, 3322.44]);
 
 
 (
@@ -82,7 +86,11 @@ u = Pbind(
         415.30 * ~har * 2,
        349.23 * ~invHar * 2,
         277.18 * ~har * 2,
-        [69.30 * ~invHar * 16, 69.30 * ~har * 8]
+        69.30 * ~har * 8 * 4.midiratio,
+       415.30 * ~har * 2,
+       349.23 * ~invHar * 2,
+        277.18 * ~har * 2 * 2.midiratio,
+        69.30 * ~har * 8 * 0.midiratio
     ],
     inf),
     // \freq, [330, 220],
@@ -90,7 +98,9 @@ u = Pbind(
     // \out, ~wahwahBus,
 	// \spos, Pwhite(0, 592896, inf).round,
     // \rate, Pseq([1 * -11.midiratio, 1 * -4.midiratio, 1 * -16.midiratio], inf),
-	\pan, Pwhite(-0.5, 0.5, inf)
+	\pan, Pwhite(-0.5, 0.5, inf),
+    \amp, 6,
+    \out, [~volumeBus, 0]
 ).play(quant: 1);
 )
 
@@ -113,5 +123,27 @@ w = Pbind(
 	// \spos, Pwhite(0, 592896, inf).round,
     // \rate, Pseq([1 * -11.midiratio, 1 * -4.midiratio, 1 * -16.midiratio], inf),
 	\pan, Pwhite(-0.5, 0.5, inf)
+).play(quant: 1);
+)
+
+
+
+(
+~chirps3.stop;
+~chirps3 = Pbind(
+	\instrument, \pulse,
+	\dur, Pseq([0.125 * 0.5], inf),
+    \freq, Pseq([
+        1396.91 * ~har * 12.midiratio,
+        1108.73 * ~invHar * 12.midiratio,
+    ], inf),
+    // \freq, [330, 220],
+    // \amp, Pseq([1], inf),
+    // \out, ~wahwahBus,
+	// \spos, Pwhite(0, 592896, inf).round,
+    // \rate, Pseq([1 * -11.midiratio, 1 * -4.midiratio, 1 * -16.midiratio], inf),
+	\pan, Pwhite(-0.5, 0.5, inf),
+    \amp, 1.5,
+    \out, [~volumeBus, 0]
 ).play(quant: 1);
 )

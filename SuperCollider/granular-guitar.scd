@@ -16,6 +16,37 @@ SynthDef(\bpfbuff, {
 }).add;
 )
 
+~vinylBuffer = Buffer.read(s, "/Users/guillaumepelletier/Desktop/Dropbox/Art/p5/Singing-Lines/SuperCollider/samples/vinyl.wav");
+
+(
+SynthDef.new(\vinylSynth, {
+    arg rate = 1, amp = 0.5, trig = 1, spos = 0;
+    var sig, env;
+    env = EnvGen.ar(
+            Env([0.01,1,0.01],
+            [0.1,2],
+            curve: 'exp',
+            releaseNode: 1),
+        gate: trig,
+        doneAction: 2
+    );
+    sig = PlayBuf.ar(2, ~vinylBuffer, 1, startPos: spos);
+    sig = sig * env;
+    sig = sig * amp;
+    Out.ar(~volumeBus, sig * 10);
+    Out.ar(0, sig);
+}).add;
+)
+
+~vinyl = Synth.new(\vinylSynth, [\amp, 0.5, \spos, 500000]);
+~vinyl.set(\trig, 0);
+
+
+
+
+
+
+
 ~speed = 0.005;
 ~speed = 0.015;
 
