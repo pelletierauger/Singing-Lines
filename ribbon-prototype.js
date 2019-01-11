@@ -106,7 +106,7 @@ getColor = function(c) {
     }
 };
 
-choosePalette();
+// choosePalette();
 // inversePalette = !inversePalette;
 palette = seedPalette();
 
