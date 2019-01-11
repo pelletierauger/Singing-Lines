@@ -2,15 +2,15 @@
 SynthDef(\pulse, {
 	arg freq = 440, pul1 = 1, pul2 = 1, pan = 0, out = 0, amp = 1;
 	var sig, mod, lp, sp, env;
-    mod = SinOsc.kr(freq) * 3;
+//     mod = SinOsc.kr(freq) * 3;
     // sp = abs(SinOsc.kr(0.1)) * 220;
 	sig = Impulse.ar(0.1, mul: 0.4)!2;
     // sig2 = Impulse.ar(pul2, mul: 0.4)!2;
     env = EnvGen.kr(Env.new([0, 1, 0.5, 0], [0.001, 0.15, 2]), doneAction: 2);
     // sig = sig + sig2;
     // sig = LPF.ar(sig, freq / 1);
-    sig = Ringz.ar(sig, [freq, freq + 2 + mod], 0.125);
-    sig = LPF.ar(in: sig, freq: [freq, freq+2], mul: 1, add: 0);
+    sig = Ringz.ar(sig, [freq, freq + 2], 0.125);
+//     sig = LPF.ar(in: sig, freq: [freq, freq+2], mul: 1, add: 0);
 	// sig = sig * 1;
     sig = sig * env;
     // sig = sig * mod;
@@ -143,7 +143,7 @@ w = Pbind(
 	// \spos, Pwhite(0, 592896, inf).round,
     // \rate, Pseq([1 * -11.midiratio, 1 * -4.midiratio, 1 * -16.midiratio], inf),
 	\pan, Pwhite(-0.5, 0.5, inf),
-    \amp, 1.5,
+    \amp, 0.5,
     \out, [~volumeBus, 0]
 ).play(quant: 1);
 )

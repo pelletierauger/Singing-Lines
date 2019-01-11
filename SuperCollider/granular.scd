@@ -369,8 +369,8 @@ PatternProxy.defaultValue;
     \buf, Pseq([~beats[0]], inf),
     \out, [~volumeBus, 0]
 ).play(quant: 1);
-// ~beat3.stop;
-// ~beat3.reset;
+~beat3.stop;
+~beat3.reset;
 )
 
 
@@ -406,7 +406,6 @@ PatternProxy.defaultValue;
     \out, 0
 ).play(quant: 1);
 ~beat5.stop;
-// ~beat5.stop;
 )
 
 
