@@ -46,7 +46,7 @@ Ribbon.prototype.show = function() {
         let f3 = (frameCount + 1) * 0.25;
         x3 = cos(i + f3 * 0.25) * cos(f3 * 0.125) * 0.75;
         //         if (x3 > x) {
-        makeLine(x + xx, 1, x, -1);
+        makeOrthoLine(x + xx, 1 + Math.random() * 0.001, x, -1);
         //         }
     }
 };

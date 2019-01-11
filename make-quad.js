@@ -162,3 +162,95 @@ function makeLine(x0, y0, x1, y1) {
     });
     addRectangleToBuffers(rectangle);
 }
+
+function makeOrthoLine(x0, y0, x1, y1) {
+    let halfW = lineOptions.weight * 0.5;
+    let rectangle = makeOrthoQuad({
+        c: [lineOptions.r, lineOptions.g, lineOptions.b, lineOptions.a],
+        v: [
+            [x0 - halfW, y0],
+            [x0 + halfW, y0],
+            [x1 - halfW, y1],
+            [x1 + halfW, y1]
+        ],
+        blurFactor: lineOptions.blurFactor
+    });
+    addRectangleToBuffers(rectangle);
+}
+
+function makeOrthoQuad(r) {
+    let c = {
+        r: r.c[0],
+        g: r.c[1],
+        b: r.c[2],
+        a: r.c[3]
+    };
+    let v0 = {
+        x: r.v[0][0],
+        y: r.v[0][1]
+    };
+    let v1 = {
+        x: r.v[1][0],
+        y: r.v[1][1]
+    };
+    let v2 = {
+        x: r.v[2][0],
+        y: r.v[2][1]
+    };
+    let v3 = {
+        x: r.v[3][0],
+        y: r.v[3][1]
+    };
+    let b = r.blurFactor;
+    let v4 = {
+        x: v0.x - b,
+        y: v0.y
+    };
+    let v5 = {
+        x: v1.x + b,
+        y: v1.y
+    };
+    let v6 = {
+        x: v2.x + b,
+        y: v2.y
+    };
+    let v7 = {
+        x: v3.x - b,
+        y: v3.y
+    };
+    let vertices = [
+        v0.x, v0.y, 0,
+        v1.x, v1.y, 0,
+        v2.x, v2.y, 0,
+        v3.x, v3.y, 0,
+        v4.x, v4.y, 0,
+        v5.x, v5.y, 0,
+        v6.x, v6.y, 0,
+        v7.x, v7.y, 0,
+    ];
+    let indices = [
+        0, 1, 2,
+        0, 2, 3,
+        4, 0, 3,
+        4, 3, 7,
+        1, 5, 6,
+        1, 6, 2
+    ];
+    for (let i = 0; i < indices.length; i++) {
+        indices[i] += rectangles * 8;
+    }
+
+    let colors = [];
+    for (let i = 0; i < 4; i++) {
+        colors.push(c.r, c.g, c.b, c.a);
+    }
+    for (let i = 0; i < 4; i++) {
+        colors.push(c.r, c.g, c.b, 0.0);
+    }
+    rectangles++;
+    return {
+        colors: colors,
+        vertices: vertices,
+        indices: indices
+    };
+}
