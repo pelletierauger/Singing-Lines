@@ -146,4 +146,5 @@ w = Pbind(
     \amp, 0.5,
     \out, [~volumeBus, 0]
 ).play(quant: 1);
+~toOSC.sendMsg("/invertPalette", 0);
 )
