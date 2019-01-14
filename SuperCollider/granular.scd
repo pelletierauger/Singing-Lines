@@ -117,7 +117,7 @@ p = Pbind(
 ~har.source = Pn(0.midiratio, 1);
 ~invHar.source = Pn(0.midiratio, 1);
 ~loc.source = Pn(320000, inf);
-~toOSC.sendMsg("/newcolor", 0);
+~toOSC.sendMsg("/getPalette", 0);
 ~toOSC.sendMsg("/blurScalar", 3);
 ~toOSC.sendMsg("/invertPalette", 0);
 // ~bea2.stop;
@@ -406,12 +406,13 @@ PatternProxy.defaultValue;
 	\dur, Pseq([0.25, 0.25, 0.25, 0.125, 0.125], inf),
     \spos, 1717440,
     \rate, Pseq([0.125, 0.25], inf),
-    \amp, Pseq([6], inf),
+    \amp, Pseq([3], inf),
 	\pan, Pwhite(-1, 1, inf),
     \buf, Pseq([~beats[0]], inf),
     \out, 0
 ).play(quant: 1);
 ~beat5.stop;
+~beat5.reset;
 )
 
 
