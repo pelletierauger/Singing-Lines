@@ -148,3 +148,25 @@ w = Pbind(
 ).play(quant: 1);
 // ~toOSC.sendMsg("/invertPalette", 0);
 )
+
+(
+~chirps4.stop;
+~chirps4 = Pbind(
+	\instrument, \pulse,
+	\dur, Pseq([0.125], inf),
+    \freq, Pseq([
+        1661.22 * ~har *2,
+        1396.91 * ~har *2,
+        1108.73 * ~invHar *2,
+        
+    ], inf),
+    // \freq, [330, 220],
+    // \amp, Pseq([1], inf),
+    // \out, ~wahwahBus,
+	// \spos, Pwhite(0, 592896, inf).round,
+    // \rate, Pseq([1 * -11.midiratio, 1 * -4.midiratio, 1 * -16.midiratio], inf),
+	\pan, Pwhite(-0.5, 0.5, inf),
+    \amp, 2,
+    \out, [~volumeBus, 0]
+).play(quant: 1);
+)
