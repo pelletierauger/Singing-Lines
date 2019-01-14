@@ -30,8 +30,8 @@ Ribbon.prototype.upgrade = function() {
 Ribbon.prototype.show = function() {
     for (let i = 0; i < this.lines.length; i += 1) {
         let x = this.lines[i].x + Math.random() * this.lines[i].blurFactor * 1;
-        let xx = cos(i * 0.1 + frameCount * 0.1) * 0.05;
-        xx = 0;
+        // let xx = cos(i * 0.1 + frameCount * 0.1) * 0.05;
+        // xx = 0;
         lineOptions.blurFactor = this.lines[i].blurFactor * blurScalar;
         let color = getColor(i + frameCount * 1);
         color.b -= 0.2;
@@ -39,23 +39,20 @@ Ribbon.prototype.show = function() {
         lineOptions.g = color.g;
         lineOptions.b = color.b;
         lineOptions.a = this.lines[i].color.a;
-        
-        if (!inversePalette) {
-            
-        } else {
+        if (inversePalette) {
             lineOptions.r *= 0.25;
             lineOptions.g *= 0.25;
             lineOptions.b *= 0.25;
             lineOptions.b -= 0.2;
         }
-        let f = frameCount * 0.01;
+        // let f = frameCount * 0.01;
         //         x = cos(i + f * 0.25) * cos(f * 0.125) * 0.75;
-        let f2 = frameCount * 0.125 * 0.5;
-        x2 = cos(i + f2 * 0.25) * cos(f2 * 0.125) * 0.75;
-        let f3 = (frameCount + 1) * 0.25;
-        x3 = cos(i + f3 * 0.25) * cos(f3 * 0.125) * 0.75;
+        // let f2 = frameCount * 0.125 * 0.5;
+        // x2 = cos(i + f2 * 0.25) * cos(f2 * 0.125) * 0.75;
+        // let f3 = (frameCount + 1) * 0.25;
+        // x3 = cos(i + f3 * 0.25) * cos(f3 * 0.125) * 0.75;
         //         if (x3 > x) {
-        makeOrthoLine(x + xx, 1 + Math.random() * 0.001, x, -1);
+        makeOrthoLine(x, 1 + Math.random() * 0.001, x, -1);
         //         }
     }
 };
@@ -116,7 +113,7 @@ getColor = function(c) {
 };
 
 // choosePalette();
-inversePalette = !inversePalette;
+// inversePalette = !inversePalette;
 palette = seedPalette();
 
 function choosePalette() {
