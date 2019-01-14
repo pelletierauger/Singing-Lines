@@ -14,23 +14,7 @@ let blurScalar = 1;
 
 function setup() {
     socket = io.connect('http://localhost:8080');
-    socket.on('receiveOSC', function(data) {
-        // console.log(data);
-        // console.log(data.args[0].value);
-        if (data.address == "/amplitude") {
-            amplitude = data.args[0].value;
-        } else if (data.address == "/newcolor") {
-            palette = seedPalette();
-            // console.log("The palette was changed!!!");
-        } else if (data.address == "/blurScalar") {
-            console.log(data);
-            blurScalar = data.args[0].value;
-            // console.log("The palette was changed!!!");
-        } else if (data.address == "/getPalette") {
-            palette = getPalette(data.args[0].value);
-            // console.log("The palette was changed!!!");
-        }
-    });
+    socket.on('receiveOSC', receiveOSC);
     pixelDensity(1);
     // cnvs = createCanvas(windowWidth, windowWidth / 16 * 9, WEBGL);
     noCanvas();
@@ -99,13 +83,9 @@ draw = function() {
     //     pal.b = 1 - pal.b;
     if (!inversePalette) {
         pal.r *= 0.25;
-    pal.g *= 0.25;
-    pal.b *= 0.25;
-    pal.b -= 0.2;
-    } else {
-//         pal.r = 1 - pal.r;
-//         pal.g = 1 - pal.g;
-//         pal.b = 1 - pal.b;
+        pal.g *= 0.25;
+        pal.b *= 0.25;
+        pal.b -= 0.2;
     }
     let rectangle;
     rectangle = makeQuad({
@@ -170,6 +150,27 @@ draw = function() {
     gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
     if (exporting && frameCount < maxFrames) {
         frameExport();
+    }
+}
+
+
+function receiveOSC(data) {
+    // console.log(data);
+    // console.log(data.args[0].value);
+    if (data.address == "/amplitude") {
+        amplitude = data.args[0].value;
+    } else if (data.address == "/newcolor") {
+        palette = seedPalette();
+        // console.log("The palette was changed!!!");
+    } else if (data.address == "/blurScalar") {
+        console.log(data);
+        blurScalar = data.args[0].value;
+        // console.log("The palette was changed!!!");
+    } else if (data.address == "/getPalette") {
+        palette = getPalette(data.args[0].value);
+        // console.log("The palette was changed!!!");
+    } else if (data.address == "/invertPalette") {
+        inversePalette = !inversePalette;
     }
 }
 
