@@ -16,7 +16,7 @@
 ~loc.source = Pn(712000, inf);
 ~har.source = Pn(0.midiratio, 1);
 ~invHar.source = Pn(0.midiratio, 1);
-~mando1Amp.source = Pn(2.0, 1);
+~mando1Amp.source = Pn(0.01, 1);
 ~mando1Pos.source = Pn(3417440, 1);
 ~beat1Amp.source = Pseq([1, 0, 0, 0], inf);
 ~toOSC.sendMsg("/blurScalar", 1);
@@ -78,6 +78,8 @@ p = Pbind(
 ~har.source = Pn(0.midiratio, 1);
 ~invHar.source = Pn(0.midiratio, 1);
 ~toOSC.sendMsg("/newcolor", 0);
+~toOSC.sendMsg("/getPalette", 0);
+~toOSC.sendMsg("/invertPalette", 0);
 // ~beat1.play(quant: 1);
 // ~beat2.stop;
 // ~beat4.stop;
@@ -99,10 +101,12 @@ p = Pbind(
 // ~beat2.reset;
 // ~beat2.play(quant: 1);
 
-~toOSC.sendMsg("/newcolor", 0);
+// ~toOSC.sendMsg("/newcolor", 0);
+~toOSC.sendMsg("/getPalette", 0);
+~toOSC.sendMsg("/invertPalette", 0);
 // ~beat4.play(quant: 1);
 // ~loc.source = Pn(Pseq([370000, 400000], inf), inf);
-//             ~toOSC.sendMsg("/blurScalar", 5);
+//             ~toOSC.sendMsg("/blurScalar", 3);
 // ~toOSC.sendMsg("/getPalette", "pastel-tornado");
 
 // ~toOSC.sendMsg("/getPalette", "random6");
@@ -115,6 +119,7 @@ p = Pbind(
 ~loc.source = Pn(320000, inf);
 ~toOSC.sendMsg("/newcolor", 0);
 ~toOSC.sendMsg("/blurScalar", 3);
+~toOSC.sendMsg("/invertPalette", 0);
 // ~bea2.stop;
 )
 
@@ -131,6 +136,7 @@ p = Pbind(
 ~mando1Amp.source = Pn(2.6, 1);
 ~toOSC.sendMsg("/blurScalar", 3);
 ~toOSC.sendMsg("/getPalette", "wild");
+~toOSC.sendMsg("/invertPalette", 0);
 )
 
 // Progressively brighter
