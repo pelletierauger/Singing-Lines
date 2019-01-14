@@ -7,17 +7,21 @@ let Palette = function(o) {
 };
 
 function getPalette(pal) {
-    let foundPalette = false;
-    for (let i = 0; i < palettes.length; i++) {
-        if (palettes[i].name === pal) {
-            foundPalette = palettes[i];
+    if (pal) {
+        let foundPalette = false;
+        for (let i = 0; i < palettes.length; i++) {
+            if (palettes[i].name === pal) {
+                foundPalette = palettes[i];
+            }
         }
-    }
-    if (foundPalette) {
-        return foundPalette;
+        if (foundPalette) {
+            return foundPalette;
+        } else {
+            logJavaScriptConsole("The requested palette does not exist.");
+            return palette;
+        }
     } else {
-        logJavaScriptConsole("The requested palette does not exist.");
-        return palette;
+        return random(palettes);
     }
 }
 
