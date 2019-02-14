@@ -316,7 +316,7 @@ SynthDef(\percu, {
     \rate, Pseq([1], inf),
     \amp, ~beat1Amp,
 	\pan, Pwhite(-1, 1, inf),
-    \buf, Pseq([~beats[0], ~beats[1], ~beats[2], ~beats[3]], inf),
+    \buf, Pseq([~beats[4], ~beats[1], ~beats[2], ~beats[3]], inf),
     \out, [~volumeBus, 0]
 ).play(quant: 1);
 ~beat1.stop;
@@ -515,4 +515,56 @@ PatternProxy.defaultValue;
     \buf, ~mando,
     \rel, 12
 ).play(quant: 1);
+)
+
+
+
+
+
+
+
+(
+SynthDef("kick", {arg out = 0, amp = 0.3, sinfreq = 60, glissf = 0.9, att = 0.01, rel = 0.45, pan = 0;
+    var env, snd, ramp;
+    env = Env.perc(att, rel, amp).kr(doneAction: 2);
+    ramp = XLine.kr(
+        start: sinfreq,
+        end: sinfreq * glissf,
+        dur: rel
+    );
+    snd = SinOsc.ar(freq: ramp, mul: env);
+    snd = Pan2.ar(snd, pan);
+    Out.ar([~volumeBus, 0], snd);
+}).add;
+)
+
+
+(
+~beat1Amp.source = Pseq([1, 0, 2, 0], inf);
+~newBeat1.stop;
+~newBeat1 = Pbind(
+    \instrument, "kick",
+//     \dur, 1,
+    \dur, Pseq([0.25, 0.25, 0.25, 0.125, 0.125], inf),
+    \att, 0.01,
+    \rel, 0.22,
+    \sinfreq, 60,
+    \glissf, 0.9,
+    \amp, 1,
+).play(quant: 1);
+)
+(
+~newBeat1b.stop;
+~newBeat1b = Pbind(
+    \instrument, \percu,
+	\dur, Pseq([0.25, 0.25, 0.25, 0.125, 0.125], inf),
+    \spos, 1717440,
+    \rate, Pseq([1], inf),
+    \amp, 0.35,
+	\pan, Pwhite(-1, 1, inf),
+    \buf, Pseq([~beats[4]], inf),
+    \out, [~volumeBus, 0]
+).play(quant: 1);
+// ~beat1.stop;
+// ~beat1.reset;
 )
