@@ -536,20 +536,20 @@ let randomPalette34 = new Palette({
     }
 });
 
-let randomPalette35 = new Palette({
-    name: "just-green-and-blue-but-nice",
-    data: {
-        blueMax: 26,
-        blueMin: 146,
-        blueOsc: 5,
-        greenMax: 23,
-        greenMin: 152,
-        greenOsc: 6,
-        redMax: 75,
-        redMin: 111,
-        redOsc: 0
-    }
-});
+// let randomPalette35 = new Palette({
+//     name: "just-green-and-blue-but-nice",
+//     data: {
+//         blueMax: 26,
+//         blueMin: 146,
+//         blueOsc: 5,
+//         greenMax: 23,
+//         greenMin: 152,
+//         greenOsc: 6,
+//         redMax: 75,
+//         redMin: 111,
+//         redOsc: 0
+//     }
+// });
 
 let randomPalette36 = new Palette({
     name: "collection-of-pinks",
