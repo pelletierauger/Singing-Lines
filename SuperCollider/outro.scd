@@ -11,9 +11,14 @@
 // t.stop;
 // ~chirps3.stop;
 )
+s.meter;
 
+(
+~chirpsEcho.play(quant: 1);
+~beat5.stop;
+)
 
-~dur.source = Pn(0.05, inf);
+~dur.source = Pn(0.005, inf);
 (
 ~loc.source = Pn(420000, inf);
 ~har.source = Pn(-2.midiratio, 1);
@@ -68,19 +73,39 @@
 ~chirpsEcho3.stop;
 ~chirpsEcho3 = Pbind(
     \instrument, \pulse,
-	\dur, Pseq([0.125 * 2], inf),
+	\dur, Pseq([0.125 * 2] * 2, inf),
     \freq, Pseq([
         Pseq([1396.91 * ~har * 12.midiratio], 4),
         Pseq([1108.73 * ~invHar * 12.midiratio], 4),
-    ], inf) * Pseq([0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.25, 0.25], inf),
-    \amp, Pseq([Pgeom(1.125, 0.5, 4)], inf),
-    \sus, 1.25,
+    ], inf) * Pseq([0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.25, 0.25], inf) * 0.5,
+    \amp, Pseq([Pgeom(0.125, 1.7, 4)], inf),
+    \sus, 2.25,
+	\pan, Pwhite(-0.5, 0.5, inf),
+    \out, [~reverbBus, 0]
+).play(quant: 1, timingOffset: 0.125);
+)
+
+(
+~chirpsEcho4.stop;
+~chirpsEcho4 = Pbind(
+    \instrument, \pulse,
+	\dur, Pseq([0.125 * 2, 0.125] * 2, inf),
+    \freq, Pseq([
+        Pseq([1396.91 * ~har * -12.midiratio], 4),
+        Pseq([1108.73 * ~invHar * 7.midiratio], 4),
+    ], inf) * Pseq([0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.25, 0.25], inf) * 0.5,
+    \amp, Pseq([Pgeom(0.125, 1.7, 4)], inf),
+    \sus, 3.25,
 	\pan, Pwhite(-0.5, 0.5, inf),
     \out, [~reverbBus, 0]
 ).play(quant: 1, timingOffset: 0.125);
 )
 
 
+(
+~chirpsEcho3.stop;
+~chirpsEcho4.stop;
+)
 
 (
 ~mandoFin6.stop;
