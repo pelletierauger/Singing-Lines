@@ -6,7 +6,7 @@
 ~invHar = PatternProxy(Pn(0.midiratio, 1));
 ~mando1Amp = PatternProxy(Pn(0.05, 1));
 ~mando1Pos = PatternProxy(Pn(3417440, 1));
-~beat1Amp = PatternProxy(Pseq([1, 0, 0, 0], inf));
+~beat1Amp = PatternProxy(Pseq([1, Rest(), Rest(), Rest()] * 0.8, inf));
 ~beat1Amp.quant = 1;
 )
 
@@ -18,13 +18,18 @@
 ~invHar.source = Pn(0.midiratio, 1);
 ~mando1Amp.source = Pn(0.01, 1);
 ~mando1Pos.source = Pn(3417440, 1);
-~beat1Amp.source = Pseq([1, 0, 0, 0], inf);
+// ~beat1Amp.source = Pseq([1, 0, 0, 0], inf);
+~beat1Amp.source = Pseq([1, Rest(), Rest(), Rest()] * 0.8, inf);
 ~toOSC.sendMsg("/blurScalar", 1);
 )
 
 
+~beat1Amp.source = Pseq([1, Rest(), Rest(), Rest()] * 0.8, inf);
+~beat1Amp.source = Pseq([1, Rest(), 3, 2] * 0.8, inf);
+
 (
-~beat1Amp.source = Pseq([1, 0, 2, 0], inf);
+// ~beat1Amp.source = Pseq([1, 0, 2, 0], inf);
+~beat1Amp.source = Pseq([1, Rest(), 3, Rest()], inf);
 ~beat5.reset;
 ~beat5.play(quant: 1);
 // ~mando1.play(quant: 1);
@@ -37,17 +42,16 @@
 ~mando1.stop;
 ~mando1.play(quant: 1);
 ~mando1Amp.source = Pn(0.45, 1);
-
+s.scope;
 (
 p.stop;
-a = 400000;
 ~vinyl = Synth.new(\vinylSynth, [\amp, 0.5, \spos, 500000]);
 p = Pbind(
     \instrument, \bpfbuff,
     \dur, Pseq([~dur], inf),
     \spos, Pwhite(1047552 - 850000 + ~loc, 1047552 - 840000 + ~loc, inf).round,
     \rate, Pseq([1 * ~har, 1 * -7.midiratio, 1 * 5.midiratio], inf),
-    \amp, Pseq([0.5], inf),
+    \amp, Pseq([0.5], inf) * 0.7,
     \pan, Pwhite(-1, 1, inf)
 ).play;
 )
@@ -84,6 +88,7 @@ p = Pbind(
 // ~beat2.stop;
 // ~beat4.stop;
 // ~loc.source = Pn(Pseq([370000, 370000, 400000], inf), inf);
+~loc.source = Pn(Pseq([400000], inf), inf);
 // ~toOSC.sendMsg("/getPalette", "wild");
 // ~toOSC.sendMsg("/getPalette", "darker-pastel-tornado");
 
@@ -97,7 +102,7 @@ p = Pbind(
 ~har.source = Pn(-2.midiratio, 1);
 ~invHar.source = Pn(10.midiratio, 1);
 
-// ~beat1Amp.source = Pseq([1, 0, 2, 2], inf);
+// ~beat1Amp.source = Pseq([1, Rest(), 3, 2] * 0.8, inf);
 // ~beat2.reset;
 // ~beat2.play(quant: 1);
 
@@ -212,99 +217,27 @@ SynthDef(\mandoline, {
 ~mando1Amp.source = Pn(0.1, 1);
 ~mando1.play(quant: 1);
 
-
 (
-n.stop;
-n = Pbind(
-	\instrument, \mandoline,
-    // \dur, Pseq([0.5, 0.5, 0.25, 0.25], inf),
-	\dur, Pseq([0.25, 0.25, 0.125, 0.125], inf),
-    // \spos, 917440,
-    // \spos, 1217440,
-
-    // lower energy
-    // \spos, 1717440,
-
-        // lower energy
-    \spos, 2417440,
-
-            // lower energy
-    \spos, 3417440,
-
-                // lower energy
-    \spos, 4217440,
-
-    // \spos, Pwhite(1047552 - 850000 + ~loc, 1047552 - 840000 + ~loc, inf).round,
-    \rate, Pseq([1.2 * ~invHar, 2.9, 4.65 * ~har], inf),
-    \amp, Pseq([0.5], inf),
-	\pan, Pwhite(-1, 1, inf),
-    \buf, ~mando
-).play(quant: 1);
-)
-
-
-
-(
-k.stop;
-k = Pbind(
-	\instrument, \mandoline,
-    // \dur, Pseq([0.5, 0.5, 0.25, 0.25], inf),
-	\dur, Pseq([0.25, 0.25, 0.125, 0.125], inf),
-    // \spos, 917440,
-    // \spos, 1217440,
-
-    // lower energy
-    \spos, 1717440,
-
-        // lower energy
-    // with the major chord, subtle shimmer
-    // \spos, 2417440,
-
-            // lower energy
-    // with the minor chord, dramatic
-//     \spos, 3417440,
-
-    // more dramatic ?
-    // \spos, 4617440,
-
-                // lower energy
-    // \spos, 3817440,
-
-    // \spos, Pwhite(1047552 - 850000 + ~loc, 1047552 - 840000 + ~loc, inf).round,
-    \rate, Pseq([0.35, 1.2 * ~invHar], inf),
-    \amp, Pseq([~volMando] * 0.5, inf),
-	\pan, Pwhite(-1, 1, inf),
-    \buf, ~mando
-).play(quant: 1);
-)
-
-
 ~beats = Array.new;
 ~folder = PathName.new("/Users/guillaumepelletier/Desktop/Dropbox/Art/p5/Singing-Lines/SuperCollider/samples/percussions/");
-
-(
 ~folder.entries.do({
     arg path;
     ~beats = ~beats.add(Buffer.read(s, path.fullPath));
 });
 )
-~beats[0].play;
 
 (
 SynthDef(\percu, {
     arg buf = ~beats[0], rate = 1, spos = 0, pan = 1, amp = 1, out = ~volumeBus;
     var sig, env, lfo;
-    // env = EnvGen.kr(Env.new([0, 1, 0.5, 0], [0.0001, 0.15, 0.75]), doneAction: 2);
+    env = EnvGen.kr(Env.new([1, 0], [0.5]), doneAction: 2);
     sig = PlayBuf.ar(2, buf, rate * BufRateScale.ir(buf), startPos: 0, doneAction: 2);
-    // sig = sig * env;
+    sig = sig * env;
     sig = sig * amp * 2;
     sig = Balance2.ar(sig[0], sig[1], 0, 1);
     Out.ar(out, sig);
-//     Out.ar(0, sig);
 }).add;
 )
-
-
 
 
 (
@@ -316,33 +249,48 @@ SynthDef(\percu, {
     \rate, Pseq([1], inf),
     \amp, ~beat1Amp,
 	\pan, Pwhite(-1, 1, inf),
-    \buf, Pseq([~beats[4], ~beats[1], ~beats[2], ~beats[3]], inf),
+    \buf, Pseq([~beats[0], ~beats[1], ~beats[2], ~beats[3]], inf),
     \out, [~volumeBus, 0]
 ).play(quant: 1);
 ~beat1.stop;
 ~beat1.reset;
 )
 
-(
-~myFirstFunction = {
-    ~beat1.play(quant: 1);
-    ~beat4.play(quant: 1);
-};
-)
-~myFirstFunction.value;
-
-PatternProxy.defaultQuant = 1;
-
-f = { "Function evaluated".postln; };
-f.value;
-
-~beat1Amp = PatternProxy(Pseq([1, 0, 0, 0], inf));
-PatternProxy.defaultQuant = 1;
-PatternProxy.defaultQuant;
+~beat1Amp.source = Pseq([1, Rest(), Rest(), Rest()], inf);
 ~beat1.play(quant: 1);
-~beat1Amp.source = Pseq([1, 0, 2, 0], inf);
-PatternProxy.defaultValue;
-~beat1Amp.quant = 1;
+
+
+~beat1Amp.source = Pseq([1, Rest(), Rest(), Rest()] * 0.8, inf);
+~beat1Amp.source = Pseq([1, Rest(), 3, 2] * 0.8, inf);
+(
+~beat1.stop;
+~beat1 = Ppar([Pbind(
+    \instrument, \percu,
+	\dur, Pseq([0.25], inf),
+    \spos, 1717440,
+    \rate, Pseq([1], inf),
+    \amp, ~beat1Amp,
+	\pan, Pwhite(-1, 1, inf),
+    \buf, Pseq([~beats[4], ~beats[1], ~beats[2], ~beats[3]], inf),
+    \out, [~volumeBus, 0]
+), Pbind(
+    \instrument, \kick,
+	\dur, Pseq([0.25, Rest(0.75)], inf),
+    \att, 0.01,
+    \rel, 0.32,
+//     \sinfreq, 60,
+    \sinfreq, 60,
+    \glissf, 0.9,
+    \amp, Pseq([1], inf) * 0.7,
+//     \amp, 1,
+    \out, [~volumeBus, 0]
+)]).play(quant: 1);
+~beat1.stop;
+~beat1.reset;
+)
+
+~beat1.play(quant: 1);
+
 
 (
 ~beat2.stop;
@@ -353,7 +301,7 @@ PatternProxy.defaultValue;
     \rate, Pseq([2], inf),
     \amp, Pseq([0, 0, 1.5, 1.5, 1.5], inf),
 	\pan, Pwhite(-1, 1, inf),
-    \buf, Pseq([~beats[0], ~beats[1], ~beats[2], ~beats[2]], inf),
+    \buf, Pseq([~beats[4], ~beats[1], ~beats[2], ~beats[2]], inf),
     \out, [~volumeBus, 0]
 ).play(quant: 1);
 ~beat2.stop;
@@ -395,10 +343,6 @@ PatternProxy.defaultValue;
 ~beat4.reset;
 )
 
-
-
-
-
 (
 ~beat5.stop;
 ~beat5 = Pbind(
@@ -408,13 +352,46 @@ PatternProxy.defaultValue;
     \rate, Pseq([0.125, 0.25], inf),
     \amp, Pseq([3], inf),
 	\pan, Pwhite(-1, 1, inf),
-    \buf, Pseq([~beats[0]], inf),
+    \buf, Pseq([~beats[4]], inf),
     \out, 0
 ).play(quant: 1);
 ~beat5.stop;
 ~beat5.reset;
 )
 
+~beat5.play(quant: 1);
+
+
+
+(
+~beat5.stop;
+~beat5 = Ppar([Pbind(
+    \instrument, \percu,
+	\dur, Pseq([0.25, 0.25, 0.25, 0.125, 0.125], inf),
+    \spos, 1717440,
+    \rate, Pseq([0.125, 0.25], inf),
+    \amp, Pseq([3], inf) * 0.3,
+	\pan, Pwhite(-1, 1, inf),
+    \buf, Pseq([~beats[4]], inf),
+    \out, 0
+), Pbind(
+    \instrument, \kick,
+	\dur, Pseq([0.25, 0.25, 0.25, 0.125, 0.125], inf),
+    \att, 0.01,
+    \rel, 0.22,
+//     \sinfreq, 60,
+    \sinfreq, Pseq([60, 60 * 2.midiratio], inf),
+    \glissf, 0.9,
+    \amp, Rest(),
+    \amp, 1 * 0.45,
+    \out, 0
+)], inf).play(quant: 1);
+~beat5.stop;
+~beat5.reset;
+)
+
+s.meter;
+~beat5.play(quant: 1);
 
 (
 ~beat6.stop;
@@ -534,7 +511,7 @@ SynthDef("kick", {arg out = 0, amp = 0.3, sinfreq = 60, glissf = 0.9, att = 0.01
     );
     snd = SinOsc.ar(freq: ramp, mul: env);
     snd = Pan2.ar(snd, pan);
-    Out.ar([~volumeBus, 0], snd);
+    Out.ar(out, snd);
 }).add;
 )
 

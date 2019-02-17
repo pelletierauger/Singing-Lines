@@ -1,15 +1,15 @@
 (
 SynthDef(\pulse, {
-	arg freq = 440, pul1 = 1, pul2 = 1, pan = 0, out = 0, amp = 1;
+    arg freq = 440, pul1 = 1, pul2 = 1, pan = 0, out = 0, amp = 1, sus = 0.125, atk = 0.001;
 	var sig, mod, lp, sp, env;
 //     mod = SinOsc.kr(freq) * 3;
     // sp = abs(SinOsc.kr(0.1)) * 220;
 	sig = Impulse.ar(0.1, mul: 0.4)!2;
     // sig2 = Impulse.ar(pul2, mul: 0.4)!2;
-    env = EnvGen.kr(Env.new([0, 1, 0.5, 0], [0.001, 0.15, 2]), doneAction: 2);
+    env = EnvGen.kr(Env.new([0, 1, 0.5, 0], [atk, sus * 1.5, 2]), doneAction: 2);
     // sig = sig + sig2;
     // sig = LPF.ar(sig, freq / 1);
-    sig = Ringz.ar(sig, [freq, freq + 2], 0.125);
+    sig = Ringz.ar(sig, [freq, freq + 2], sus);
 //     sig = LPF.ar(in: sig, freq: [freq, freq+2], mul: 1, add: 0);
 	// sig = sig * 1;
     sig = sig * env;
@@ -71,7 +71,8 @@ t = Pbind(
 	\pan, Pwhite(-0.5, 0.5, inf),
     \amp, 2,
     \out, [~volumeBus, 0]
-).play(quant: 1);
+).play(quant: [1, 0.5]);
+~toOSC.sendMsg("/blurScalar", 1);
 )
 6644.88 * 0.5;
 i = Synth.new(\pulse, [\freq, 3322.44]);
@@ -99,7 +100,7 @@ u = Pbind(
 	// \spos, Pwhite(0, 592896, inf).round,
     // \rate, Pseq([1 * -11.midiratio, 1 * -4.midiratio, 1 * -16.midiratio], inf),
 	\pan, Pwhite(-0.5, 0.5, inf),
-    \amp, 6,
+    \amp, 3,
     \out, [~volumeBus, 0]
 ).play(quant: 1);
 )
