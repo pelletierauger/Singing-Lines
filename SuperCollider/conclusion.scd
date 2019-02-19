@@ -71,18 +71,18 @@ t.stop;
 ~mandoFin7.stop;
 ~chirpsEcho.stop;
 ~chirpsEcho2.stop;
-Pbind(
-    \instrument, \pulse,
-	\dur, Pseq([0.125 * 2], inf),
-    \freq, Pseq([
-//         Pseq([1396.91 * ~invHar * 8.midiratio], 16),
-        Pseq([1108.73 * ~invHar * 4.midiratio], 16),
-    ] * 1, inf),
-    \amp, Pseq([Pgeom(1.5, 0.75, 64)], 1),
-	\pan, Pwhite(-0.5, 0.5, inf),
-    \sus, 0.25,
-    \out, [~volumeBus, 0]
-).play(quant: 0.5);
+// Pbind(
+//     \instrument, \pulse,
+// 	\dur, Pseq([0.125 * 2], inf),
+//     \freq, Pseq([
+// //         Pseq([1396.91 * ~invHar * 8.midiratio], 16),
+//         Pseq([1108.73 * ~invHar * 4.midiratio], 16),
+//     ] * 1, inf),
+//     \amp, Pseq([Pgeom(1.5, 0.75, 64)], 1),
+// 	\pan, Pwhite(-0.5, 0.5, inf),
+//     \sus, 0.25,
+//     \out, [~volumeBus, 0]
+// ).play(quant: 0.5);
 // Pbind(
 //     \instrument, \pulse,
 // 	\dur, Pseq([0.125 * 2], inf),

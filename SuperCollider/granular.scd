@@ -88,7 +88,7 @@ p = Pbind(
 // ~beat2.stop;
 // ~beat4.stop;
 // ~loc.source = Pn(Pseq([370000, 370000, 400000], inf), inf);
-~loc.source = Pn(Pseq([400000], inf), inf);
+// ~loc.source = Pn(Pseq([400000], inf), inf);
 // ~toOSC.sendMsg("/getPalette", "wild");
 // ~toOSC.sendMsg("/getPalette", "darker-pastel-tornado");
 
@@ -420,12 +420,12 @@ s.meter;
     \spos, 210000,
     \rate, Pseq([1.2 * 0.midiratio], inf),
     \amp, Pseq([1.5], inf),
-	\pan, Pwhite(-1, 1, inf),
+	\pan, Pwhite(-1, 1, inf)
     \buf, ~mando
 ).play(quant: 1);
 )
 
-
+"ooooooooooooolllllllllllll".postln;
 (
 ~mandoFin2.stop;
 ~mandoFin2 = Pbind(

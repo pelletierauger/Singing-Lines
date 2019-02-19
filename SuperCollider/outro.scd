@@ -70,41 +70,52 @@ s.meter;
 )
 
 (
+~toOSC.sendMsg("/getPalette", 0);
+~toOSC.sendMsg("/invertPalette", 0);
+~loc.source = Pn(520000, inf);
+// ~loc.source = Pn(520000, inf);
+~dur.source = Pn(0.005, inf);
+// p.stop;
+~mandoFin6.stop;
+~mandoFin7.stop;
+~chirpsEcho.stop;
+~chirpsEcho2.stop;
 ~chirpsEcho3.stop;
 ~chirpsEcho3 = Pbind(
     \instrument, \pulse,
 	\dur, Pseq([0.125 * 2] * 2, inf),
     \freq, Pseq([
         Pseq([1396.91 * ~har * 12.midiratio], 4),
-        Pseq([1108.73 * ~invHar * 12.midiratio], 4),
-    ], inf) * Pseq([0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.25, 0.25], inf) * 0.5,
+        Pseq([1108.73 * ~invHar * 17.midiratio], 4),
+    ], inf) * Pseq([Pn(0.5, 4), Pn(0.25, 4)], inf) * 1,
     \amp, Pseq([Pgeom(0.125, 1.7, 4)], inf),
     \sus, 2.25,
+    \atk, 0.01,
 	\pan, Pwhite(-0.5, 0.5, inf),
     \out, [~reverbBus, 0]
-).play(quant: 1, timingOffset: 0.125);
-)
-
-(
+).play(quant: 1);
 ~chirpsEcho4.stop;
-~chirpsEcho4 = Pbind(
-    \instrument, \pulse,
-	\dur, Pseq([0.125 * 2, 0.125] * 2, inf),
-    \freq, Pseq([
-        Pseq([1396.91 * ~har * -12.midiratio], 4),
-        Pseq([1108.73 * ~invHar * 7.midiratio], 4),
-    ], inf) * Pseq([0.5, 0.5, 0.5, 0.5, 0.25, 0.25, 0.25, 0.25], inf) * 0.5,
-    \amp, Pseq([Pgeom(0.125, 1.7, 4)], inf),
-    \sus, 3.25,
-	\pan, Pwhite(-0.5, 0.5, inf),
-    \out, [~reverbBus, 0]
-).play(quant: 1, timingOffset: 0.125);
+// ~chirpsEcho4 = Pbind(
+//     \instrument, \pulse,
+// 	\dur, Pseq([0.125 * 2, 0.125] * 4, inf),
+//     \freq, Pseq([
+//         Pseq([1396.91 * ~har * 2.midiratio], 4),
+//         Pseq([1108.73 * ~invHar * 5.midiratio], 4),
+//     ], inf) * Pseq([Pn(0.5, 4), Pn(0.25, 4)], inf) * 0.5,
+//     \amp, Pseq([Pgeom(0.125, 1.7, 4)], inf),
+//     \sus, 2.25,
+//     \atk, 0.01,
+// 	\pan, Pwhite(-0.5, 0.5, inf),
+//     \out, [~reverbBus, 0]
+// ).play(quant: 1, timingOffset: 0.125);
 )
 
 
 (
 ~chirpsEcho3.stop;
 ~chirpsEcho4.stop;
+~vinyl.set(\trig, 0);
+p.stop;
 )
 
 (
