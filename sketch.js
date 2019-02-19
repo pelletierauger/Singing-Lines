@@ -118,7 +118,9 @@ draw = function() {
     var color_buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, color_buffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
-    setShaders();
+    if (frameCount == 1) {
+        setShaders();
+    }
     /* ======== Associating shaders to buffer objects =======*/
     // Bind vertex buffer object
     gl.bindBuffer(gl.ARRAY_BUFFER, vertex_buffer);
