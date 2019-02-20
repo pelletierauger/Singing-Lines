@@ -35,7 +35,7 @@ SynthDef.new(\vinylSynth, {
     sig = sig * amp * ampScalar;
     Out.ar(~volumeBus, sig * 10);
     Out.ar(0, sig);
-}).add;
+}, [0, 0, 0, 0, 2]).add;
 )
 
 ~vinyl = Synth.new(\vinylSynth, [\amp, 0.5, \spos, 500000]);

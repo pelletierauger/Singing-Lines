@@ -49,13 +49,13 @@
 s.scope;
 (
 p.stop;
-~vinyl = Synth.new(\vinylSynth, [\amp, 0.5, \spos, 500000]);
+// ~vinyl = Synth.new(\vinylSynth, [\amp, 0.5, \spos, 500000]);
 p = Pbind(
     \instrument, \bpfbuff,
     \dur, Pseq([~dur], inf),
     \spos, Pwhite(1047552 - 850000 + ~loc, 1047552 - 840000 + ~loc, inf).round,
     \rate, Pseq([1 * ~har, 1 * -7.midiratio, 1 * 5.midiratio], inf),
-    \amp, Pseq([0.5], inf) * 0.7 * ~globalAmp,
+    \amp, Pseq([0.5], inf) * 0.9 * ~globalAmp,
     \pan, Pwhite(-1, 1, inf)
 ).play;
 )
