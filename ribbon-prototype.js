@@ -120,33 +120,35 @@ function choosePalette() {
     palette = random(palettes);
 }
 
-Ribbon.prototype.show2 = function() {
-    for (let i = 0; i < 10; i += 1) {
-        let x = this.lines[i].x + Math.random() * this.lines[i].blurFactor * 1;
-        x = -1 + i * width/9 * 0.02 + Math.random() * this.lines[i].blurFactor * 1;
-        // let xx = cos(i * 0.1 + frameCount * 0.1) * 0.05;
-        // xx = 0;
-        lineOptions.blurFactor = blurScalar * 0.5;
-        let color = getColor(i + frameCount * 1);
-        color.b -= 0.2;
-        lineOptions.r = color.r;
-        lineOptions.g = color.g;
-        lineOptions.b = color.b;
-        lineOptions.a = this.lines[i].color.a;
-        if (inversePalette) {
-            lineOptions.r *= 0.25;
-            lineOptions.g *= 0.25;
-            lineOptions.b *= 0.25;
-            lineOptions.b -= 0.2;
+function blurrier() {
+    Ribbon.prototype.show = function() {
+        for (let i = 0; i < 10; i += 1) {
+            let x = this.lines[i].x + Math.random() * this.lines[i].blurFactor * 1;
+            x = -1 + i * width/9 * 0.02 + Math.random() * this.lines[i].blurFactor * 1;
+            // let xx = cos(i * 0.1 + frameCount * 0.1) * 0.05;
+            // xx = 0;
+            lineOptions.blurFactor = blurScalar * 0.5;
+            let color = getColor(i + frameCount * 1);
+            color.b -= 0.2;
+            lineOptions.r = color.r;
+            lineOptions.g = color.g;
+            lineOptions.b = color.b;
+            lineOptions.a = this.lines[i].color.a;
+            if (inversePalette) {
+                lineOptions.r *= 0.25;
+                lineOptions.g *= 0.25;
+                lineOptions.b *= 0.25;
+                lineOptions.b -= 0.2;
+            }
+    //         let f = frameCount * 0.01;
+    //                 x = cos(i + f * 0.25) * cos(f * 0.125) * 0.75;
+            // let f2 = frameCount * 0.125 * 0.5;
+            // x2 = cos(i + f2 * 0.25) * cos(f2 * 0.125) * 0.75;
+            // let f3 = (frameCount + 1) * 0.25;
+            // x3 = cos(i + f3 * 0.25) * cos(f3 * 0.125) * 0.75;
+            //         if (x3 > x) {
+            makeOrthoLine(x, 1 + Math.random() * 0.001, x, -1);
+            //         }
         }
-//         let f = frameCount * 0.01;
-//                 x = cos(i + f * 0.25) * cos(f * 0.125) * 0.75;
-        // let f2 = frameCount * 0.125 * 0.5;
-        // x2 = cos(i + f2 * 0.25) * cos(f2 * 0.125) * 0.75;
-        // let f3 = (frameCount + 1) * 0.25;
-        // x3 = cos(i + f3 * 0.25) * cos(f3 * 0.125) * 0.75;
-        //         if (x3 > x) {
-        makeOrthoLine(x, 1 + Math.random() * 0.001, x, -1);
-        //         }
-    }
-};
+    };
+}

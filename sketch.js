@@ -173,6 +173,8 @@ function receiveOSC(data) {
         // console.log("The palette was changed!!!");
     } else if (data.address == "/invertPalette") {
         inversePalette = !inversePalette;
+    } else if (data.address == "/makeBlurrier") {
+        blurrier();
     }
 }
 
