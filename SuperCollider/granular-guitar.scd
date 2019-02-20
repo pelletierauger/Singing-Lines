@@ -20,7 +20,7 @@ SynthDef(\bpfbuff, {
 
 (
 SynthDef.new(\vinylSynth, {
-    arg rate = 1, amp = 0.5, trig = 1, spos = 0;
+    arg rate = 1, amp = 0.5, trig = 1, spos = 0, ampScalar = 1;
     var sig, env;
     env = EnvGen.ar(
             Env([0.01,1,0.01],
@@ -32,7 +32,7 @@ SynthDef.new(\vinylSynth, {
     );
     sig = PlayBuf.ar(2, ~vinylBuffer, 1, startPos: spos);
     sig = sig * env;
-    sig = sig * amp;
+    sig = sig * amp * ampScalar;
     Out.ar(~volumeBus, sig * 10);
     Out.ar(0, sig);
 }).add;

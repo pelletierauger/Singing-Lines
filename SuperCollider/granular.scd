@@ -8,6 +8,8 @@
 ~mando1Pos = PatternProxy(Pn(3417440, 1));
 ~beat1Amp = PatternProxy(Pseq([1, Rest(), Rest(), Rest()] * 0.8, inf));
 ~beat1Amp.quant = 1;
+~globalAmp = PatternProxy(Pn(1, inf));
+~amplitudeScalar = 1;
 )
 
 // Reset the Pattern Proxies
@@ -21,6 +23,8 @@
 // ~beat1Amp.source = Pseq([1, 0, 0, 0], inf);
 ~beat1Amp.source = Pseq([1, Rest(), Rest(), Rest()] * 0.8, inf);
 ~toOSC.sendMsg("/blurScalar", 1);
+~globalAmp.source = Pn(1, inf);
+~amplitudeScalar = 1;
 )
 
 
@@ -51,7 +55,7 @@ p = Pbind(
     \dur, Pseq([~dur], inf),
     \spos, Pwhite(1047552 - 850000 + ~loc, 1047552 - 840000 + ~loc, inf).round,
     \rate, Pseq([1 * ~har, 1 * -7.midiratio, 1 * 5.midiratio], inf),
-    \amp, Pseq([0.5], inf) * 0.7,
+    \amp, Pseq([0.5], inf) * 0.7 * ~globalAmp,
     \pan, Pwhite(-1, 1, inf)
 ).play;
 )
@@ -149,19 +153,8 @@ p = Pbind(
 ~loc.source = Pn(Pseq([370000, 400000], inf), inf);
 
 
-~malletOctave = PatternProxy(Pn(1, 1));
-~malletOctave.source = Pn(4, 1);
-
-
-~mando = Buffer.read(s, "/Users/guillaumepelletier/Desktop/Dropbox/Création musicale/Projets Ableton Live/La patate du dix-neuf Project/Samples/Recorded/0007 Mandoline 1.aif");
-
-
-// This is the right one :
+// Load the mandonline sample
 ~mando = Buffer.read(s, "/Users/guillaumepelletier/Desktop/Dropbox/Création musicale/Projets Ableton Live/La patate du dix-neuf Project/Samples/Recorded/0003 Mandoline 2.aif");
-
-~mando.numFrames;
-~mando.bufnum;
-~mando;
 
 (
 SynthDef(\mandoline, {
@@ -175,7 +168,6 @@ SynthDef(\mandoline, {
     Out.ar(out, sig);
 }).add;
 )
-
 
 
 (
@@ -236,6 +228,21 @@ SynthDef(\percu, {
     sig = sig * amp * 2;
     sig = Balance2.ar(sig[0], sig[1], 0, 1);
     Out.ar(out, sig);
+}).add;
+)
+
+(
+SynthDef("kick", {arg out = 0, amp = 0.3, sinfreq = 60, glissf = 0.9, att = 0.01, rel = 0.45, pan = 0;
+    var env, snd, ramp;
+    env = Env.perc(att, rel, amp).kr(doneAction: 2);
+    ramp = XLine.kr(
+        start: sinfreq,
+        end: sinfreq * glissf,
+        dur: rel
+    );
+    snd = SinOsc.ar(freq: ramp, mul: env);
+    snd = Pan2.ar(snd, pan);
+    Out.ar(out, snd);
 }).add;
 )
 
@@ -335,7 +342,7 @@ SynthDef(\percu, {
     \dur, Pseq([0.25], inf),
     \spos, 1717440,
     \rate, Pseq([8], inf),
-    \amp, Pseq([0, 4], inf),
+    \amp, Pseq([0, 2], inf),
 	\pan, Pwhite(-1, 1, inf),
     \buf, Pseq([~beats[2]], inf),
 ).play(quant: 1);
@@ -425,7 +432,6 @@ s.meter;
 ).play(quant: 1);
 )
 
-"ooooooooooooolllllllllllll".postln;
 (
 ~mandoFin2.stop;
 ~mandoFin2 = Pbind(
@@ -492,27 +498,6 @@ s.meter;
     \buf, ~mando,
     \rel, 12
 ).play(quant: 1);
-)
-
-
-
-
-
-
-
-(
-SynthDef("kick", {arg out = 0, amp = 0.3, sinfreq = 60, glissf = 0.9, att = 0.01, rel = 0.45, pan = 0;
-    var env, snd, ramp;
-    env = Env.perc(att, rel, amp).kr(doneAction: 2);
-    ramp = XLine.kr(
-        start: sinfreq,
-        end: sinfreq * glissf,
-        dur: rel
-    );
-    snd = SinOsc.ar(freq: ramp, mul: env);
-    snd = Pan2.ar(snd, pan);
-    Out.ar(out, snd);
-}).add;
 )
 
 

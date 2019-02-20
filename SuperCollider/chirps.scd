@@ -106,29 +106,6 @@ u = Pbind(
 )
 
 
-
-(
-w.stop;
-w = Pbind(
-	\instrument, \pulse,
-	\dur, Pseq([0.125 * 8], inf),
-    \freq, Pseq([
-        415.30 * ~har * 0.25,
-       349.23 * ~har * 0.5,
-        277.18 * ~har * 0.25,
-    ],
-    inf),
-    // \freq, [330, 220],
-    \amp, Pseq([1], inf),
-    // \out, ~wahwahBus,
-	// \spos, Pwhite(0, 592896, inf).round,
-    // \rate, Pseq([1 * -11.midiratio, 1 * -4.midiratio, 1 * -16.midiratio], inf),
-	\pan, Pwhite(-0.5, 0.5, inf)
-).play(quant: 1);
-)
-
-
-
 (
 ~chirps3.stop;
 ~chirps3 = Pbind(
@@ -136,7 +113,7 @@ w = Pbind(
 	\dur, Pseq([0.125 * 0.5], inf),
     \freq, Pseq([
         1396.91 * ~har * 12.midiratio,
-        1108.73 * ~invHar * 12.midiratio,
+        1108.73 * ~har * 12.midiratio,
     ], inf),
     // \freq, [330, 220],
     // \amp, Pseq([1], inf),
@@ -144,30 +121,36 @@ w = Pbind(
 	// \spos, Pwhite(0, 592896, inf).round,
     // \rate, Pseq([1 * -11.midiratio, 1 * -4.midiratio, 1 * -16.midiratio], inf),
 	\pan, Pwhite(-0.5, 0.5, inf),
-    \amp, 0.5,
+    \amp, 0.25,
     \out, [~volumeBus, 0]
 ).play(quant: 1);
 // ~toOSC.sendMsg("/invertPalette", 0);
 )
 
 (
-~chirps4.stop;
-~chirps4 = Pbind(
+~chirpsLow.stop;
+~chirpsLow = Pbind(
 	\instrument, \pulse,
-	\dur, Pseq([0.125], inf),
+	\dur, Pseq([0.125 * 8], inf),
     \freq, Pseq([
-        1661.22 * ~har *2,
-        1396.91 * ~har *2,
-        1108.73 * ~invHar *2,
-        
-    ], inf),
+        415.30 * ~har * 2,
+       349.23 * ~invHar * 2,
+        277.18 * ~har * 2,
+        69.30 * ~har * 8 * 4.midiratio,
+       415.30 * ~har * 2,
+       349.23 * ~invHar * 2,
+        277.18 * ~har * 2 * 2.midiratio,
+        69.30 * ~har * 8 * 0.midiratio
+    ] * 0.25,
+    inf),
     // \freq, [330, 220],
     // \amp, Pseq([1], inf),
     // \out, ~wahwahBus,
 	// \spos, Pwhite(0, 592896, inf).round,
     // \rate, Pseq([1 * -11.midiratio, 1 * -4.midiratio, 1 * -16.midiratio], inf),
+    \sus, 2,
 	\pan, Pwhite(-0.5, 0.5, inf),
-    \amp, 2,
+    \amp, 3,
     \out, [~volumeBus, 0]
-).play(quant: 1);
+).play(quant: [1, 0.5]);
 )
