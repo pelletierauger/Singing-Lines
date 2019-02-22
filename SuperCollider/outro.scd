@@ -15,9 +15,6 @@
 // ~beat5.stop;
 )
 
-~chirpsEcho2.play(quant: 1);
-~chirpsEcho.play(quant: 1);
-
 (
 // L'heure bleue
 ~loc.source = Pn(420000, inf);
@@ -58,9 +55,7 @@
     \atk, 0.15,
 	\pan, Pwhite(-0.5, 0.5, inf),
     \out, [~reverbBus, 0]
-).play();
-~chirpsEcho2.stop;
-~chirpsEcho2.reset;
+).play(quant: 1);
 )
 
 (
@@ -95,8 +90,8 @@
 
 //---------------------- Fading out -----------------------//
 
-~amplitudeScalar = 1;
 (
+~amplitudeScalar = 1;
 ~fadeOut = {
         ~amplitudeScalar = ~amplitudeScalar - 0.05;
         ~globalAmp.source = Pn(~amplitudeScalar, inf);

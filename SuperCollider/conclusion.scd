@@ -4,6 +4,10 @@
 )
 
 (
+~har.quant = 1;
+~invHar.quant = 1;
+)
+(
 ~har.source = Pn(-7.midiratio, 1);
 ~invHar.source = Pn(-7.midiratio, 1);
 ~toOSC.sendMsg("/newcolor", 0);
@@ -24,6 +28,7 @@ p.stop;
 ~beat1.stop;
 ~beat2.stop;
 ~beat6.stop;
+~toOSC.sendMsg("/invertPalette", 0);
 )
 
 (
