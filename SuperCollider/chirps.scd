@@ -1,5 +1,5 @@
 (
-SynthDef(\pulse, {
+SynthDef(\fancypulse, {
     arg freq = 440, pan = 0, out = 0, amp = 1, sus = 0.125, atk = 0.001;
     var sig, env;
     sig = Impulse.ar(0.1, mul: 0.4)!2;
@@ -7,6 +7,19 @@ SynthDef(\pulse, {
     sig = Ringz.ar(sig, [freq, freq + 2], sus);
     sig = sig * env * 1.2 * amp;
     sig = Balance2.ar(sig[0], sig[1], pan, 1);
+	Out.ar(out, sig);
+}).add;
+)
+
+(
+SynthDef(\pulse, {
+    arg freq = 440, pan = 0, out = 0, amp = 1, sus = 0.125, atk = 0.001;
+    var sig, env;
+    sig = Impulse.ar(0.1, mul: 0.4);
+    env = EnvGen.kr(Env.new([0, 1, 0], [atk, sus * 1.25]), doneAction: 2);
+    sig = Ringz.ar(sig, freq, sus);
+    sig = sig * env * 1.2 * amp;
+    sig = Pan2.ar(sig, pan);
 	Out.ar(out, sig);
 }).add;
 )
@@ -29,21 +42,18 @@ t = Pbind(
 )
 
 (
+~uFreqs.source = Pseq(~toFreq.("Gb4") * [7, 4, 0, 4, 7, 4, 2, 0].midiratio, inf);
+)
+
+(
+~uFreqs = PatternProxy(
+    Pseq(~toFreq.("Gb4") * [7, 4, 0, 4, 7, 4, 2, 0].midiratio, inf)
+);
 u.stop;
 u = Pbind(
     \instrument, \pulse,
     \dur, Pseq([0.125 * 8], inf),
-    \freq, Pseq([
-        415.30 * ~har * 2,
-        349.23 * ~invHar * 2,
-        277.18 * ~har * 2,
-        69.30 * ~har * 8 * 4.midiratio,
-        415.30 * ~har * 2,
-        349.23 * ~invHar * 2,
-        277.18 * ~har * 2 * 2.midiratio,
-        69.30 * ~har * 8 * 0.midiratio
-    ],
-    inf),
+    \freq, ~uFreqs,
     \pan, Pwhite(-0.5, 0.5, inf),
     \amp, 3,
     \out, [~volumeBus, 0]
@@ -74,16 +84,9 @@ u = Pbind(
     ~chirpsLowSpeed.quant = 1;
     ~chirpsLowSus = PatternProxy(Pseq([2], inf));
     ~chirpsLowSus.quant = 1;
-    ~chirpsLowFreqs = PatternProxy(Pseq([
-        415.30 * ~har * 2,
-        349.23 * ~invHar * 2,
-        277.18 * ~har * 2,
-        69.30 * ~har * 8 * 4.midiratio,
-        415.30 * ~har * 2,
-        349.23 * ~invHar * 2,
-        277.18 * ~har * 2 * 2.midiratio,
-        69.30 * ~har * 8 * 0.midiratio
-    ] * 0.25, inf));
+    ~chirpsLowFreqs = PatternProxy(
+        Pseq(~toFreq.("Gb2") * [7, 4, 0, 4, 7, 4, 2, 0].midiratio * 5.midiratio, inf)
+    );
     ~chirpsLowFreqs.quant = 1;
     ~chirpsLow.stop;
     ~chirpsLow.reset;
@@ -102,7 +105,6 @@ u = Pbind(
 
 (
 // Petit jour
-// TempoClock.default.sched(1, {
     ~har.source = Pn(0.midiratio, 1);
     ~invHar.source = Pn(0.midiratio, 1);
     ~toOSC.sendMsg("/getPalette", 0);
@@ -111,13 +113,12 @@ u = Pbind(
         1396.91 * 5.midiratio,
         1108.73 * 5.midiratio,
     ], inf);
+        ~uFreqs.source = Pseq(~toFreq.("Gb4") * [7, 4, 0, 4, 7, 4, 2, 0].midiratio * 7.midiratio, inf);
     ~moreEnergy.value;
-// })
 )
 // TempoClock.default.clear;
 (
 // Petit soir
-// TempoClock.default.sched(1, {
     ~har.source = Pn(-2.midiratio, 1);
     ~invHar.source = Pn(-2.midiratio, 1);
     ~toOSC.sendMsg("/getPalette", 0);
@@ -126,9 +127,9 @@ u = Pbind(
         1396.91 * 5.midiratio,
         1108.73 * 12.midiratio,
     ], inf);
-    ~startChirpsLow.value;
-// ~moreEnergy.value;
-// })
+    ~uFreqs.source = Pseq(~toFreq.("Gb4") * [7, 4, 0, 4, 7, 4, 2, 0].midiratio * 5.midiratio, inf);
+//     ~startChirpsLow.value;
+    ~moreEnergy.value;
 )
 
 (
@@ -138,44 +139,20 @@ u = Pbind(
         ~chirpsLow.stop;
         ~chirpsLow.reset;
         ~chirpsLowSpeed.source = Pseq([1] * 0.5, inf);
-        ~chirpsLowFreqs.source = Pn(Pseq([
-            415.30 * ~har * 2,
-            349.23 * ~invHar * 2,
-            277.18 * ~har * 2,
-            69.30 * ~har * 8 * 4.midiratio,
-            415.30 * ~har * 2,
-            349.23 * ~invHar * 2,
-            277.18 * ~har * 2 * 2.midiratio,
-            69.30 * ~har * 8 * 0.midiratio
-        ].stutter(2) * 0.25, inf) * Pseq([1, 0.5], inf), inf);
-        ~chirpsLow.play();
+        ~chirpsLowFreqs.source = Pn(Pseq(
+            ~toFreq.("Gb2") * [7, 4, 0, 4, 7, 4, 2, 0].midiratio.stutter(2), inf) * 7.midiratio * Pseq([0.5, 1], inf), inf);
+        ~chirpsLow.play(quant: 1);
     });
     if (~energyIndex == 1, {
         ~chirpsLowSpeed.source = Pseq([1] * 0.25, inf);
-        ~chirpsLowFreqs.source = Pn(Pseq([
-            415.30 * ~har * 2,
-            349.23 * ~invHar * 2,
-            277.18 * ~har * 2,
-            69.30 * ~har * 8 * 4.midiratio,
-            415.30 * ~har * 2,
-            349.23 * ~invHar * 2,
-            277.18 * ~har * 2 * 2.midiratio,
-            69.30 * ~har * 8 * 0.midiratio
-        ].stutter(4) * 0.25, inf) * Pseq([1, 0.5], inf), inf);
+        ~chirpsLowFreqs.source = Pn(Pseq(
+            ~toFreq.("Gb2") * [7, 4, 0, 4, 7, 4, 2, 0].midiratio.stutter(4), inf) * 5.midiratio * Pseq([1, 0.5], inf), inf);
         ~chirpsLowSus.source = Pseq([1.5], inf);
     });
     if (~energyIndex == 2, {
         ~chirpsLowSpeed.source = Pseq([1] * 0.125, inf);
-        ~chirpsLowFreqs.source = Pn(Pseq([
-            415.30 * ~har * 2,
-            349.23 * ~invHar * 2,
-            277.18 * ~har * 2,
-            69.30 * ~har * 8 * 4.midiratio,
-            415.30 * ~har * 2,
-            349.23 * ~invHar * 2,
-            277.18 * ~har * 2 * 2.midiratio,
-            69.30 * ~har * 8 * 0.midiratio
-        ].stutter(8) * 0.25, inf) * Pseq([1, 0.5], inf), inf);
+        ~chirpsLowFreqs.source = Pn(Pseq(
+            ~toFreq.("Gb2") * [7, 4, 0, 4, 7, 4, 2, 0].midiratio.stutter(8), inf) * 7.midiratio * Pseq([1, 0.5], inf), inf);
         ~chirpsLowSus.source = Pseq([1], inf);
     });
     ~energyIndex = ~energyIndex + 1;
@@ -190,4 +167,19 @@ u.stop;
 ~chirpsLow.stop;
 p.stop;
 ~chirps3.stop;
+)
+
+(
+~loc.source = Pn(400000, inf);
+~har.source = Pn(-7.midiratio, 1);
+~invHar.source = Pn(-7.midiratio, 1);
+    ~toOSC.sendMsg("/getPalette", 0);
+    ~toOSC.sendMsg("/invertPalette", 0);
+    ~uFreqs.source = Pseq(~toFreq.("Gb4") * [7, 4, 0, 4, 7, 4, 2, 0].midiratio * 0.midiratio, inf);
+    ~chirpsLowFreqs.source = Pn(Pseq(
+            ~toFreq.("Gb2") * [7, 4, 0, 4, 7, 4, 2, 0].midiratio.stutter(8), inf) * 0.midiratio * Pseq([1, 0.5], inf), inf);
+            ~chirpsHar.source = Pseq([
+        1396.91 * 5.midiratio,
+        1108.73 * 5.midiratio,
+    ], inf);
 )

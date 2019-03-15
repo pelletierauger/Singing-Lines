@@ -55,7 +55,7 @@ p = Pbind(
     \dur, Pseq([~dur], inf),
     \spos, Pwhite(1047552 - 850000 + ~loc, 1047552 - 840000 + ~loc, inf).round,
     \rate, Pseq([1 * ~har, 1 * -7.midiratio, 1 * 5.midiratio], inf),
-    \amp, Pseq([0.5], inf) * 0.9 * ~globalAmp,
+    \amp, Pseq([0.5], inf) * 0.7 * ~globalAmp,
     \pan, Pwhite(-1, 1, inf)
 ).play;
 )

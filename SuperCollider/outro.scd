@@ -28,7 +28,7 @@
 (
 ~chirpsEcho.stop;
 ~chirpsEcho = Pbind(
-    \instrument, \pulse,
+    \instrument, \fancypulse,
 	\dur, Pseq([0.125 * 2], inf),
     \freq, Pseq([
         Pseq([1396.91 * ~invHar * 8.midiratio], 16),
@@ -44,7 +44,7 @@
 (
 ~chirpsEcho2.stop;
 ~chirpsEcho2 = Pbind(
-    \instrument, \pulse,
+    \instrument, \fancypulse,
 	\dur, Pseq([0.125 * 2] * 4, inf),
     \freq, Pseq([
         Pseq([1396.91 * ~har * 0.midiratio], 2),
